@@ -8,7 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-@WebServlet("/film")
+
+@WebServlet("/film/*")
 public class FilmServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -17,7 +18,9 @@ public class FilmServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        resp.setContentType("text/html");
+        resp.getWriter().println("<h1>Film Servlet</h1>");
+        resp.getWriter().println("<h2><a href=\"http://localhost:8080/\">Вернуться</a></h2>");
     }
 
     @Override

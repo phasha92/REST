@@ -1,8 +1,9 @@
-package org.example.model;
+package org.example.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Film {
     private int id;
@@ -16,6 +17,8 @@ public class Film {
         this.releaseYear = releaseYear;
         this.actors = new ArrayList<>(actors);  // Копируем список при создании объекта
     }
+
+    public Film(){}
 
     public int getId() {
         return id;
@@ -48,5 +51,28 @@ public class Film {
 
     public void setActors(List<Actor> actors) {
         this.actors = actors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return id == film.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", actors=" + actors +
+                '}';
     }
 }

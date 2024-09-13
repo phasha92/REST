@@ -1,8 +1,10 @@
-package org.example.model;
+package org.example.entity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
 
 public class Actor {
     private int id;
@@ -14,6 +16,8 @@ public class Actor {
         this.name = name;
         this.films = new ArrayList<>(films);  // Копируем список при создании объекта
     }
+
+    public Actor() {}
 
     public int getId() {
         return id;
@@ -40,4 +44,25 @@ public class Actor {
         return Collections.unmodifiableList(films);  // Возвращаем неизменяемый список
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Actor actor = (Actor) o;
+        return id == actor.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, films);
+    }
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", films=" + films +
+                '}';
+    }
 }
