@@ -6,25 +6,17 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class Actor {
-    private int id;
+public class Actor extends Entity {
     private String name;
-    private List<Film> films;  // Список фильмов
+    private List<? super Film> films;  // Список фильмов
 
-    public Actor(int id, String name, List<Film> films) {
-        this.id = id;
+    public Actor(int id, String name, List<? super Film> films) {
+        super(id);
         this.name = name;
         this.films = new ArrayList<>(films);  // Копируем список при создании объекта
     }
 
-    public Actor() {}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Actor() {
     }
 
     public String getName() {
@@ -35,12 +27,12 @@ public class Actor {
         this.name = name;
     }
 
-    public void setFilms(List<Film> films) {
+    public void setFilms(List<? super Film> films) {
         this.films = films;
     }
 
     // Возвращаем неизменяемый список
-    public List<Film> getFilms() {
+    public List<? super Film> getFilms() {
         return Collections.unmodifiableList(films);  // Возвращаем неизменяемый список
     }
 

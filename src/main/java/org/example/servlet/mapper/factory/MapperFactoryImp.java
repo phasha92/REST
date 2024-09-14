@@ -1,6 +1,8 @@
 package org.example.servlet.mapper.factory;
 
+import org.example.model.Entity;
 import org.example.servlet.dto.ActorDTO;
+import org.example.servlet.dto.DTO;
 import org.example.servlet.dto.FilmDTO;
 import org.example.model.Actor;
 import org.example.model.Film;
@@ -11,7 +13,7 @@ import org.example.servlet.mapper.Mapper;
 public class MapperFactoryImp implements MapperFactory {
 
     @Override
-    public Mapper getMapperForEntity(Object entity) {
+    public Mapper getMapperForEntity(Entity entity) {
 
         return switch (entity) {
             case Film film -> new FilmMapper();
@@ -22,7 +24,7 @@ public class MapperFactoryImp implements MapperFactory {
     }
 
     @Override
-    public Mapper getMapperForDTO(Object dto) {
+    public Mapper getMapperForDTO(DTO dto) {
         return switch (dto) {
             case FilmDTO filmDTO -> new FilmMapper();
             case ActorDTO actorDTO -> new ActorMapper();

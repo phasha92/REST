@@ -1,5 +1,7 @@
 package org.example.servlet.mapper;
 
+import org.example.model.Entity;
+import org.example.servlet.dto.DTO;
 import org.example.servlet.dto.FilmDTO;
 import org.example.model.Actor;
 import org.example.model.Film;
@@ -10,22 +12,20 @@ import java.util.stream.Collectors;
 public class FilmMapper implements Mapper {
 
     @Override
-    public Object toDTO(Object entity) {
-        if (!(entity instanceof Film film)) {
-            throw new IllegalArgumentException("Expected a Film entity");
-        }
-        List<String> actorNames = film.getActors().stream()
-                .map(Actor::getName)
-                .collect(Collectors.toList());
-
-        return new FilmDTO(film.getId(), film.getTitle(), film.getReleaseYear(), actorNames);
+    public FilmDTO toDTO(Entity entity) {
+        if (entity instanceof Film film) {
+            List<String> actorNames = film.getActors().stream()
+                    .map((object) -> (Actor) object)
+                    .map(Actor::getName)
+                    .collect(Collectors.toList());
+            return new FilmDTO(film.getId(), film.getTitle(), film.getReleaseYear(), actorNames);
+        } else throw new IllegalArgumentException("Expected an Film entity");
     }
 
     @Override
-    public Object toEntity(Object dto) {
-        if (!(dto instanceof FilmDTO filmDTO)) {
-            throw new IllegalArgumentException("Expected a FilmDTO");
-        }
-        return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of()); // актеры добавляются позже
+    public Film toEntity(DTO dto) {
+        if (dto instanceof FilmDTO filmDTO) {
+            return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of()); // актеры добавляются позже
+        } else throw new IllegalArgumentException("Expected a FilmDTO");
     }
 }

@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.model.Entity;
+import org.example.servlet.dto.ActorDTO;
+import org.example.servlet.dto.DTO;
 import org.example.servlet.dto.FilmDTO;
 import org.example.model.Actor;
 import org.example.model.Film;
@@ -32,7 +35,7 @@ public class Main {
         }};
 
         // Создание фильма с актерами
-        Film film = new Film(1, "test", 1, actors);
+        Entity film = new Film(1, "test", 1, actors);
         System.out.println(film);
 
         // Использование фабрики для получения маппера
@@ -40,20 +43,24 @@ public class Main {
 
         Mapper mapper = factory.getMapperForEntity(film);
 
-        FilmDTO newFilm = (FilmDTO) mapper.toDTO(film);
+        DTO newFilm = mapper.toDTO(film);
         System.out.println(newFilm);
 
-        film = (Film) mapper.toEntity(newFilm);
+        film = mapper.toEntity(newFilm);
         System.out.println(film);
 
-        Film finalFilm = film;
-        List<Film> films = new ArrayList<>() {{
+        Entity finalFilm = film;
+        List<Entity> films = new ArrayList<>() {{
             add(finalFilm);
         }};
-        Actor actor = new Actor(1, "123", films);
+        Entity actor = new Actor(1, "123", films);
         System.out.println(actor);
 
         mapper = factory.getMapperForEntity(actor);
-        System.out.println(mapper.toDTO(actor));
+        DTO actorDTO = mapper.toDTO(actor);
+        System.out.println(actorDTO);
+        mapper = factory.getMapperForDTO(actorDTO);
+        System.out.println(mapper.toEntity(actorDTO));
+
     }
 }

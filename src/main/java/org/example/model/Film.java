@@ -5,27 +5,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Film {
-    private int id;
+public class Film extends Entity {
     private String title;
     private int releaseYear;
-    private List<Actor> actors;  // Список актеров
+    private List<? super Actor> actors;  // Список актеров
 
-    public Film(int id, String title, int releaseYear, List<Actor> actors) {
-        this.id = id;
+    public Film(int id, String title, int releaseYear, List<? super Actor> actors) {
+        super(id);
         this.title = title;
         this.releaseYear = releaseYear;
         this.actors = new ArrayList<>(actors);  // Копируем список при создании объекта
     }
 
-    public Film(){}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Film() {
     }
 
     public String getTitle() {
@@ -45,7 +37,7 @@ public class Film {
     }
 
     // Возвращаем неизменяемый список
-    public List<Actor> getActors() {
+    public List<? super Actor> getActors() {
         return Collections.unmodifiableList(actors);  // Возвращаем неизменяемый список
     }
 
