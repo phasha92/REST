@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Film extends Entity {
     private String title;
     private int releaseYear;
-    private List<? super Actor> actors;  // Список актеров
+    private List<Actor> actors;  // Список актеров
 
-    public Film(int id, String title, int releaseYear, List<? super Actor> actors) {
+    public Film(int id, String title, int releaseYear, List<Actor> actors) {
         super(id);
         this.title = title;
         this.releaseYear = releaseYear;

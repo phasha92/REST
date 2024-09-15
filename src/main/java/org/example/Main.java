@@ -1,9 +1,9 @@
 package org.example;
 
+import org.example.dao.DBConnectManager;
 import org.example.model.Entity;
-import org.example.servlet.dto.ActorDTO;
+import org.example.servlet.ActorServlet;
 import org.example.servlet.dto.DTO;
-import org.example.servlet.dto.FilmDTO;
 import org.example.model.Actor;
 import org.example.model.Film;
 
@@ -11,6 +11,7 @@ import org.example.servlet.mapper.Mapper;
 import org.example.servlet.mapper.factory.MapperFactory;
 import org.example.servlet.mapper.factory.MapperFactoryImp;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class Main {
         System.out.println(film);
 
         Entity finalFilm = film;
-        List<Entity> films = new ArrayList<>() {{
-            add(finalFilm);
+        List<Film> films = new ArrayList<>() {{
+            add((Film) finalFilm);
         }};
         Entity actor = new Actor(1, "123", films);
         System.out.println(actor);
@@ -61,6 +62,14 @@ public class Main {
         System.out.println(actorDTO);
         mapper = factory.getMapperForDTO(actorDTO);
         System.out.println(mapper.toEntity(actorDTO));
+
+        try {
+           var connection = DBConnectManager.getConnection();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

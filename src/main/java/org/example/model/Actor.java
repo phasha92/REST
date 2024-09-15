@@ -8,9 +8,9 @@ import java.util.Objects;
 
 public class Actor extends Entity {
     private String name;
-    private List<? super Film> films;  // Список фильмов
+    private List<Film> films;  // Список фильмов
 
-    public Actor(int id, String name, List<? super Film> films) {
+    public Actor(int id, String name, List<Film> films) {
         super(id);
         this.name = name;
         this.films = new ArrayList<>(films);  // Копируем список при создании объекта
@@ -27,7 +27,7 @@ public class Actor extends Entity {
         this.name = name;
     }
 
-    public void setFilms(List<? super Film> films) {
+    public void setFilms(List<Film> films) {
         this.films = films;
     }
 
