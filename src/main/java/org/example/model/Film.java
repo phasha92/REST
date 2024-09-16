@@ -37,7 +37,7 @@ public class Film extends Entity {
     }
 
     // Возвращаем неизменяемый список
-    public List<? super Actor> getActors() {
+    public List<Actor> getActors() {
         return Collections.unmodifiableList(actors);  // Возвращаем неизменяемый список
     }
 

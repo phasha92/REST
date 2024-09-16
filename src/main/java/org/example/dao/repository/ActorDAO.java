@@ -13,6 +13,7 @@ public class ActorDAO {
 
     // Создание нового актера
     public void createActor(Actor actor) throws SQLException {
+
         String query = ActorQuery.CREATE.getQuery();
 
         try (Connection connection = DBConnectManager.getConnection();
@@ -25,6 +26,7 @@ public class ActorDAO {
 
     // Получение актера по ID
     public Actor getActorById(int id) throws SQLException {
+
         String query = ActorQuery.GET_BY_ID.getQuery();
         Actor actor = null;
 
@@ -35,15 +37,47 @@ public class ActorDAO {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
+                String name = resultSet.getString("name");
                 List<Film> films = getFilmsByActorId(id);
-                actor = new Actor(resultSet.getInt("id"), resultSet.getString("name"), films);
+
+                actor = new Actor(id, name, films);
             }
         }
         return actor;
     }
 
+    // Обновление информации об актере
+    public void updateActor(Actor actor) throws SQLException {
+
+        String query = ActorQuery.UPDATE.getQuery();  // SQL запрос из Enum
+
+        try (Connection connection = DBConnectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, actor.getName());  // Устанавливаем новое имя
+            statement.setInt(2, actor.getId());       // Устанавливаем ID актера
+            statement.executeUpdate();
+        }
+    }
+
+    // Удаление актера по ID
+    public void deleteActor(int id) throws SQLException {
+
+        String query = ActorQuery.DELETE.getQuery();  // SQL запрос из Enum
+
+        try (Connection connection = DBConnectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, id);  // Устанавливаем ID актера для удаления
+            statement.executeUpdate();
+        }
+    }
+
+
     // Получение всех актеров
     public List<Actor> getAllActors() throws SQLException {
+
         String query = ActorQuery.GET_ALL.getQuery();
         List<Actor> actors = new ArrayList<>();
 
@@ -52,10 +86,12 @@ public class ActorDAO {
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
+
                 int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
                 List<Film> films = getFilmsByActorId(id);
-                Actor actor = new Actor(id, resultSet.getString("name"), films);
-                actors.add(actor);
+
+                actors.add(new Actor(id, name, films));
             }
         }
         return actors;
@@ -63,6 +99,7 @@ public class ActorDAO {
 
     // Получение фильмов для актера по его ID
     private List<Film> getFilmsByActorId(int actorId) throws SQLException {
+
         String query = ActorQuery.GET_FILMS_BY_ACTOR_ID.getQuery();
         List<Film> films = new ArrayList<>();
 
@@ -73,7 +110,12 @@ public class ActorDAO {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                films.add(new Film(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getInt("release_year"), new ArrayList<>()));
+
+                int filmId = resultSet.getInt("id");
+                String filmTitle = resultSet.getString("title");
+                int releaseYear = resultSet.getInt("release_year");
+
+                films.add(new Film(filmId, filmTitle, releaseYear, new ArrayList<>()));
             }
         }
         return films;

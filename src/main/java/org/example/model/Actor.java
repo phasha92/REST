@@ -32,7 +32,7 @@ public class Actor extends Entity {
     }
 
     // Возвращаем неизменяемый список
-    public List<? super Film> getFilms() {
+    public List<Film> getFilms() {
         return Collections.unmodifiableList(films);  // Возвращаем неизменяемый список
     }
 
