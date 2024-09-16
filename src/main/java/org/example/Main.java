@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.dao.DBConnectManager;
+import org.example.dao.repository.ActorDAO;
 import org.example.model.Entity;
 import org.example.servlet.ActorServlet;
 import org.example.servlet.dto.DTO;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
+/*
         // Создание актеров
         Actor actor1 = new Actor();
         actor1.setName("111");
@@ -62,13 +63,31 @@ public class Main {
         System.out.println(actorDTO);
         mapper = factory.getMapperForDTO(actorDTO);
         System.out.println(mapper.toEntity(actorDTO));
+*/
+        ActorDAO actorDAO = new ActorDAO();
 
         try {
-           var connection = DBConnectManager.getConnection();
+            // 1. Создание нового актера
+           Actor actor = new Actor();
+            actor.setName("Robert Downey Stark.");
+            actorDAO.createActor(actor);
+            System.out.println("Actor created: " + actor);
 
+            // 2. Получение актера по ID
+            Actor retrievedActor = actorDAO.getActorById(actor.getId());
+            System.out.println("Actor retrieved: " + retrievedActor);
+
+            // 3. Обновление актера
+            actor.setName("Updated Name");
+            actorDAO.updateActor(actor);
+            System.out.println("Actor updated: " + actorDAO.getActorById(actor.getId()));
+
+            // 4. Удаление актера
+             actorDAO.deleteActor(actor.getId());
+            System.out.println("Actor deleted");
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }

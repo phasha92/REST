@@ -17,10 +17,17 @@ public class ActorDAO {
         String query = ActorQuery.CREATE.getQuery();
 
         try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, actor.getName());
             statement.executeUpdate();
+
+            // Получаем сгенерированный ID актера
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    actor.setId(generatedKeys.getInt(1));  // Устанавливаем ID в объект Actor
+                }
+            }
         }
     }
 
