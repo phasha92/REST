@@ -2,8 +2,10 @@ package org.example;
 
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.ActorDAO;
+import org.example.dao.repository.FilmDAO;
 import org.example.model.Entity;
 import org.example.servlet.ActorServlet;
+import org.example.servlet.dto.ActorDTO;
 import org.example.servlet.dto.DTO;
 import org.example.model.Actor;
 import org.example.model.Film;
@@ -63,7 +65,7 @@ public class Main {
         System.out.println(actorDTO);
         mapper = factory.getMapperForDTO(actorDTO);
         System.out.println(mapper.toEntity(actorDTO));
-*/
+
         ActorDAO actorDAO = new ActorDAO();
 
         try {
@@ -89,6 +91,43 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+*/
+        FilmDAO filmDAO = new FilmDAO();
 
+        try {
+       /*     // 1. Создание нового фильма
+            Film film = new Film();
+            film.setTitle("Iron Man");
+            film.setReleaseYear(2008);
+            filmDAO.createFilm(film);
+            System.out.println("Film created: " + film);
+
+            // 2. Получение фильма по ID
+            Film retrievedFilm = filmDAO.getFilmById(film.getId());
+            System.out.println("Film retrieved: " + retrievedFilm);
+
+            // 3. Обновление фильма
+            film.setTitle("Iron Man (Updated)");
+            filmDAO.updateFilm(film);
+            System.out.println("Film updated: " + filmDAO.getFilmById(film.getId()));
+
+            // 4. Удаление фильма
+            for (int i = 9; i < 20; i++) {
+                filmDAO.deleteFilm(i);
+            }
+          //
+            System.out.println("Film deleted");
+
+            new ActorDAO().getAll().forEach((actor) -> {
+
+                Mapper mapper = new MapperFactoryImp().getMapperForEntity(actor);
+                System.out.println(mapper.toDTO(actor));
+            });
+*/
+            Actor actor= new ActorDAO().getById(5);
+            System.out.println(actor);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

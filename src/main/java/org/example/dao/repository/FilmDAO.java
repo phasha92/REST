@@ -9,10 +9,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmDAO {
+public class FilmDAO implements DAO<Film> {
 
     // Создание нового фильма
-    public void createFilm(Film film) throws SQLException {
+    @Override
+    public void create(Film film) throws SQLException {
 
         String query = FilmQuery.CREATE.getQuery();
 
@@ -29,16 +30,12 @@ public class FilmDAO {
                     film.setId(generatedKeys.getInt(1));
                 }
             }
-
-            // Добавляем связи фильм-актер в таблицу Film_Actor
-            if (film.getActors() != null) {
-                addActorsToFilm(film.getId(), film.getActors());
-            }
         }
     }
 
     // Получение фильма по ID
-    public Film getFilmById(int id) throws SQLException {
+    @Override
+    public Film getById(int id) throws SQLException {
 
         String query = FilmQuery.GET_BY_ID.getQuery();
         Film film = null;
@@ -51,16 +48,19 @@ public class FilmDAO {
 
             if (resultSet.next()) {
 
+                String title = resultSet.getString("title");
+                int releaseYear = resultSet.getInt("release_year");
                 List<Actor> actors = getActorsByFilmId(id);  // Получаем актеров для фильма
 
-                film = new Film(resultSet.getInt("id"), resultSet.getString("title"), resultSet.getInt("release_year"), actors);
+                film = new Film(id, title, releaseYear, actors);
             }
         }
         return film;
     }
 
     // Получение всех фильмов
-    public List<Film> getAllFilms() throws SQLException {
+    @Override
+    public List<Film> getAll() throws SQLException {
 
         String query = FilmQuery.GET_ALL.getQuery();
         List<Film> films = new ArrayList<>();
@@ -83,7 +83,8 @@ public class FilmDAO {
     }
 
     // Обновление фильма
-    public void updateFilm(Film film) throws SQLException {
+    @Override
+    public void update(Film film) throws SQLException {
 
         String query = FilmQuery.UPDATE.getQuery();
 
@@ -94,15 +95,12 @@ public class FilmDAO {
             statement.setInt(2, film.getReleaseYear());
             statement.setInt(3, film.getId());
             statement.executeUpdate();
-
-            // Обновляем связи фильм-актер в таблице Film_Actor
-            removeActorsFromFilm(film.getId());  // Удаляем старые связи
-            addActorsToFilm(film.getId(), film.getActors());  // Добавляем новые связи
         }
     }
 
     // Удаление фильма по ID
-    public void deleteFilm(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
 
         String query = FilmQuery.DELETE.getQuery();
 
@@ -134,35 +132,5 @@ public class FilmDAO {
             }
         }
         return actors;
-    }
-
-    // Добавление актеров к фильму
-    private void addActorsToFilm(int filmId, List<Actor> actors) throws SQLException {
-
-        String query = FilmQuery.ADD_ACTOR_TO_FILM.getQuery();
-
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            for (Actor actor : actors) {
-                statement.setInt(1, filmId);
-                statement.setInt(2, actor.getId());
-                statement.addBatch();
-            }
-            statement.executeBatch();
-        }
-    }
-
-    // Удаление всех актеров из фильма
-    private void removeActorsFromFilm(int filmId) throws SQLException {
-
-        String query = FilmQuery.REMOVE_ACTORS_FROM_FILM.getQuery();
-
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, filmId);
-            statement.executeUpdate();
-        }
     }
 }

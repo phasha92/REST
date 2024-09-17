@@ -9,10 +9,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActorDAO {
+public class ActorDAO implements DAO<Actor> {
 
     // Создание нового актера
-    public void createActor(Actor actor) throws SQLException {
+    @Override
+    public void create(Actor actor) throws SQLException {
 
         String query = ActorQuery.CREATE.getQuery();
 
@@ -32,7 +33,8 @@ public class ActorDAO {
     }
 
     // Получение актера по ID
-    public Actor getActorById(int id) throws SQLException {
+    @Override
+    public Actor getById(int id) throws SQLException {
 
         String query = ActorQuery.GET_BY_ID.getQuery();
         Actor actor = null;
@@ -55,7 +57,8 @@ public class ActorDAO {
     }
 
     // Обновление информации об актере
-    public void updateActor(Actor actor) throws SQLException {
+    @Override
+    public void update(Actor actor) throws SQLException {
 
         String query = ActorQuery.UPDATE.getQuery();  // SQL запрос из Enum
 
@@ -69,7 +72,8 @@ public class ActorDAO {
     }
 
     // Удаление актера по ID
-    public void deleteActor(int id) throws SQLException {
+    @Override
+    public void delete(int id) throws SQLException {
 
         String query = ActorQuery.DELETE.getQuery();  // SQL запрос из Enum
 
@@ -83,7 +87,8 @@ public class ActorDAO {
 
 
     // Получение всех актеров
-    public List<Actor> getAllActors() throws SQLException {
+    @Override
+    public List<Actor> getAll() throws SQLException {
 
         String query = ActorQuery.GET_ALL.getQuery();
         List<Actor> actors = new ArrayList<>();
