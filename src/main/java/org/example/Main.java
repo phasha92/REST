@@ -65,57 +65,57 @@ public class Main {
         System.out.println(actorDTO);
         mapper = factory.getMapperForDTO(actorDTO);
         System.out.println(mapper.toEntity(actorDTO));
-
+*/
         ActorDAO actorDAO = new ActorDAO();
 
         try {
             // 1. Создание нового актера
            Actor actor = new Actor();
             actor.setName("Robert Downey Stark.");
-            actorDAO.createActor(actor);
+            actorDAO.create(actor);
             System.out.println("Actor created: " + actor);
 
             // 2. Получение актера по ID
-            Actor retrievedActor = actorDAO.getActorById(actor.getId());
+            Actor retrievedActor = actorDAO.getById(actor.getId());
             System.out.println("Actor retrieved: " + retrievedActor);
 
             // 3. Обновление актера
             actor.setName("Updated Name");
-            actorDAO.updateActor(actor);
-            System.out.println("Actor updated: " + actorDAO.getActorById(actor.getId()));
+            actorDAO.update(actor);
+            System.out.println("Actor updated: " + actorDAO.getById(actor.getId()));
 
             // 4. Удаление актера
-             actorDAO.deleteActor(actor.getId());
+             actorDAO.delete(actor.getId());
             System.out.println("Actor deleted");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-*/
+
         FilmDAO filmDAO = new FilmDAO();
 
         try {
-       /*     // 1. Создание нового фильма
+           // 1. Создание нового фильма
             Film film = new Film();
             film.setTitle("Iron Man");
             film.setReleaseYear(2008);
-            filmDAO.createFilm(film);
+            filmDAO.create(film);
             System.out.println("Film created: " + film);
 
             // 2. Получение фильма по ID
-            Film retrievedFilm = filmDAO.getFilmById(film.getId());
+            Film retrievedFilm = filmDAO.getById(film.getId());
             System.out.println("Film retrieved: " + retrievedFilm);
 
             // 3. Обновление фильма
             film.setTitle("Iron Man (Updated)");
-            filmDAO.updateFilm(film);
-            System.out.println("Film updated: " + filmDAO.getFilmById(film.getId()));
+            filmDAO.update(film);
+            System.out.println("Film updated: " + filmDAO.getById(film.getId()));
 
             // 4. Удаление фильма
-            for (int i = 9; i < 20; i++) {
-                filmDAO.deleteFilm(i);
-            }
-          //
+
+               filmDAO.delete(film.getId());
+
+
             System.out.println("Film deleted");
 
             new ActorDAO().getAll().forEach((actor) -> {
@@ -123,8 +123,8 @@ public class Main {
                 Mapper mapper = new MapperFactoryImp().getMapperForEntity(actor);
                 System.out.println(mapper.toDTO(actor));
             });
-*/
-            Actor actor= new ActorDAO().getById(5);
+
+            Actor actor= new ActorDAO().getById(100);
             System.out.println(actor);
         } catch (SQLException e) {
             e.printStackTrace();

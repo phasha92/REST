@@ -16,10 +16,13 @@ public class ActorDAO implements DAO<Actor> {
     public void create(Actor actor) throws SQLException {
 
         String query = ActorQuery.CREATE.getQuery();
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
+        try {
+            connection = DBConnectManager.getConnection();
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            connection.setAutoCommit(false);
             statement.setString(1, actor.getName());
             statement.executeUpdate();
 
@@ -29,6 +32,19 @@ public class ActorDAO implements DAO<Actor> {
                     actor.setId(generatedKeys.getInt(1));  // Устанавливаем ID в объект Actor
                 }
             }
+
+            connection.commit(); // подтверждаем транзакцию/ или откат
+
+        } catch (SQLException e) {
+            try {
+                if (connection != null) connection.rollback();  // Откат транзакции в случае ошибки
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            throw e;  // Пробрасываем исключение дальше
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
     }
 
@@ -61,13 +77,29 @@ public class ActorDAO implements DAO<Actor> {
     public void update(Actor actor) throws SQLException {
 
         String query = ActorQuery.UPDATE.getQuery();  // SQL запрос из Enum
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
+        try {
+            connection = DBConnectManager.getConnection();
+            statement = connection.prepareStatement(query);
+            connection.setAutoCommit(false);
             statement.setString(1, actor.getName());  // Устанавливаем новое имя
             statement.setInt(2, actor.getId());       // Устанавливаем ID актера
             statement.executeUpdate();
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            try {
+                if (connection != null) connection.rollback();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            throw e;  // Пробрасываем исключение дальше
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
     }
 
@@ -76,12 +108,26 @@ public class ActorDAO implements DAO<Actor> {
     public void delete(int id) throws SQLException {
 
         String query = ActorQuery.DELETE.getQuery();  // SQL запрос из Enum
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
+        try {
+            connection = DBConnectManager.getConnection();
+            statement = connection.prepareStatement(query);
+            connection.setAutoCommit(false);
             statement.setInt(1, id);  // Устанавливаем ID актера для удаления
             statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                if (connection != null) connection.rollback();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            throw e;  // Пробрасываем исключение дальше
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
         }
     }
 
