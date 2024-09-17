@@ -70,7 +70,7 @@ public class Main {
 
         try {
             // 1. Создание нового актера
-           Actor actor = new Actor();
+            Actor actor = new Actor();
             actor.setName("Robert Downey Stark.");
             actorDAO.create(actor);
             System.out.println("Actor created: " + actor);
@@ -85,7 +85,7 @@ public class Main {
             System.out.println("Actor updated: " + actorDAO.getById(actor.getId()));
 
             // 4. Удаление актера
-             actorDAO.delete(actor.getId());
+            actorDAO.delete(actor.getId());
             System.out.println("Actor deleted");
 
         } catch (SQLException e) {
@@ -95,7 +95,7 @@ public class Main {
         FilmDAO filmDAO = new FilmDAO();
 
         try {
-           // 1. Создание нового фильма
+            // 1. Создание нового фильма
             Film film = new Film();
             film.setTitle("Iron Man");
             film.setReleaseYear(2008);
@@ -113,9 +113,7 @@ public class Main {
 
             // 4. Удаление фильма
 
-               filmDAO.delete(film.getId());
-
-
+            filmDAO.delete(film.getId());
             System.out.println("Film deleted");
 
             new ActorDAO().getAll().forEach((actor) -> {
@@ -124,7 +122,12 @@ public class Main {
                 System.out.println(mapper.toDTO(actor));
             });
 
-            Actor actor= new ActorDAO().getById(100);
+            filmDAO.getAll().forEach((film1) -> {
+                Mapper mapper = new MapperFactoryImp().getMapperForEntity(film1);
+                System.out.println(mapper.toDTO(film1));
+            });
+
+            Actor actor = new ActorDAO().getById(actorDAO.getAll().size() / 2);
             System.out.println(actor);
         } catch (SQLException e) {
             e.printStackTrace();
