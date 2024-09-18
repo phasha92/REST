@@ -2,7 +2,9 @@ package org.example;
 
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.ActorDAO;
+import org.example.dao.repository.DAO;
 import org.example.dao.repository.FilmDAO;
+import org.example.dao.repository.util.EntityExistenceChecker;
 import org.example.model.Entity;
 import org.example.servlet.ActorServlet;
 import org.example.servlet.dto.ActorDTO;
@@ -129,6 +131,19 @@ public class Main {
 
             Actor actor = new ActorDAO().getById(actorDAO.getAll().size() / 2);
             System.out.println(actor);
+
+            //----------------------------------------------------------------
+            Actor newActor = new Actor();
+            newActor.setName("Trueman");
+            actorDAO.create(newActor);
+
+            Film newFilm = new Film();
+            newFilm.setTitle("Peanuts");
+            filmDAO.create(newFilm);
+
+            actorDAO.linkFilmWithActor(1, 111);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
