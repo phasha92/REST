@@ -32,12 +32,14 @@ public interface DAO<T> {
             eStatement.setInt(1, firstId);
             eStatement.setInt(2, secondId);
             try (ResultSet res = eStatement.executeQuery()) {
-                if (res.next()) if (!(res.getInt(1) > 0)) {
+                if (res.next())
+                    if (res.getInt(1) > 0)
+                        throw new SQLException("Film id(" + firstId + ") and actor id(" + secondId + ") are already linked");
 
-                    iStatement.setInt(1, firstId);
-                    iStatement.setInt(2, secondId);
-                    iStatement.executeUpdate();
-                }
+                iStatement.setInt(1, firstId);
+                iStatement.setInt(2, secondId);
+                iStatement.executeUpdate();
+
             }
 
         }
@@ -46,11 +48,11 @@ public interface DAO<T> {
     default void linkFilmWithActor(int filmId, int actorId) throws SQLException {
 
         // Проверка, существует ли фильм и актёр
-        if (!EntityExistenceChecker.isExist("Film", filmId)) {
+        if (EntityExistenceChecker.isExist("Film", filmId)) {
             throw new SQLException("Film with id " + filmId + " does not exist.");
         }
 
-        if (!EntityExistenceChecker.isExist("Actor", actorId)) {
+        if (EntityExistenceChecker.isExist("Actor", actorId)) {
             throw new SQLException("Actor with id " + actorId + " does not exist.");
         }
 

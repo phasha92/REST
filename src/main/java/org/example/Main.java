@@ -141,7 +141,11 @@ public class Main {
             newFilm.setTitle("Peanuts");
             filmDAO.create(newFilm);
 
-            actorDAO.linkFilmWithActor(1, 111);
+           // actorDAO.linkFilmWithActor(1, 1);
+
+            for (int i = 0; i < 100; i++) {
+                System.out.println(i+"->"+EntityExistenceChecker.isExist("actor", i));
+            }
 
 
         } catch (SQLException e) {

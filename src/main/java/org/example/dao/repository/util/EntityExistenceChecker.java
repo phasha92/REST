@@ -21,6 +21,6 @@ public class EntityExistenceChecker {
                 return resultSet.getInt(1) > 0;  // Если есть хотя бы одна запись
             }
         }
-        return false;
+        return true;
     }
 }
