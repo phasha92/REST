@@ -23,20 +23,20 @@ public interface DAO<T> {
 
     private void linkEntities(int firstId, int secondId) throws SQLException {
 
-        String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
+        String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
         try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(existLinkQuery);
-             PreparedStatement statement1 = connection.prepareStatement(insertQuery)) {
+             PreparedStatement eStatement = connection.prepareStatement(existLinkQuery);
+             PreparedStatement iStatement = connection.prepareStatement(insertQuery)) {
 
-            statement.setInt(1, firstId);
-            statement.setInt(2, secondId);
-            try (ResultSet res = statement.executeQuery()) {
-                if (res.next()) if (res.getInt(1) == 0) {
+            eStatement.setInt(1, firstId);
+            eStatement.setInt(2, secondId);
+            try (ResultSet res = eStatement.executeQuery()) {
+                if (res.next()) if (!(res.getInt(1) > 0)) {
 
-                    statement1.setInt(1, firstId);
-                    statement1.setInt(2, secondId);
-                    statement1.executeUpdate();
+                    iStatement.setInt(1, firstId);
+                    iStatement.setInt(2, secondId);
+                    iStatement.executeUpdate();
                 }
             }
 
