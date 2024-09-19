@@ -36,8 +36,4 @@ public class FilmServiceImpl implements FilmService {
         return dao.getAll();
     }
 
-    @Override
-    public void linkFilmWithActor(int filmId, int actorId) throws SQLException {
-        dao.linkFilmWithActor(filmId, actorId);
-    }
 }

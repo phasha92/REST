@@ -10,6 +10,4 @@ public interface ActorService extends EntityService<Actor> {
     void update(Actor actor) throws SQLException;
 
     void delete(int id) throws SQLException;
-
-    void linkActorWithFilm(int filmId, int actorId) throws SQLException;
 }

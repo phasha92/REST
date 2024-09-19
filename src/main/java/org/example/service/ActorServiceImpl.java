@@ -35,9 +35,4 @@ public class ActorServiceImpl implements ActorService {
     public List<Actor> getAll() throws SQLException {
         return dao.getAll();
     }
-
-    @Override
-    public void linkActorWithFilm(int filmId, int actorId) throws SQLException {
-        dao.linkFilmWithActor(actorId, filmId);
-    }
 }

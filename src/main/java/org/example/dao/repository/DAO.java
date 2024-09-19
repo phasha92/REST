@@ -21,40 +21,43 @@ public interface DAO<T> {
 
     List<T> getAll() throws SQLException;
 
-    default void linkEntities(int firstId, int secondId) throws SQLException {
-
+    static void linkEntities(int filmId, int actorId) throws SQLException {
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
         String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
+
         try (Connection connection = DBConnectManager.getConnection();
              PreparedStatement eStatement = connection.prepareStatement(existLinkQuery);
              PreparedStatement iStatement = connection.prepareStatement(insertQuery)) {
 
-            eStatement.setInt(1, firstId);
-            eStatement.setInt(2, secondId);
+            // Проверка, существует ли уже такая связь
+            eStatement.setInt(1, filmId);
+            eStatement.setInt(2, actorId);
             try (ResultSet res = eStatement.executeQuery()) {
-                if (res.next())
-                    if (res.getInt(1) > 0)
-                        throw new SQLException("Film id(" + firstId + ") and actor id(" + secondId + ") are already linked");
+                if (res.next()) {
+                    if (res.getInt(1) > 0) {
+                        throw new SQLException("Film id(" + filmId + ") and actor id(" + actorId + ") are already linked");
+                    }
+                }
 
-                iStatement.setInt(1, firstId);
-                iStatement.setInt(2, secondId);
+                // Если связи нет, то добавляем её
+                iStatement.setInt(1, filmId);  // Порядок правильный: filmId -> actorId
+                iStatement.setInt(2, actorId);
                 iStatement.executeUpdate();
             }
         }
     }
 
-    default void linkFilmWithActor(int filmId, int actorId) throws SQLException {
-
-        // Проверка, существует ли фильм и актёр
-        if (EntityExistenceChecker.isExist("Film", filmId)) {
+    static void linkFilmWithActor(int filmId, int actorId) throws SQLException {
+        // Проверка существования фильма и актёра
+        if (!EntityExistenceChecker.isExist("Film", filmId)) {
             throw new SQLException("Film with id " + filmId + " does not exist.");
         }
 
-        if (EntityExistenceChecker.isExist("Actor", actorId)) {
+        if (!EntityExistenceChecker.isExist("Actor", actorId)) {
             throw new SQLException("Actor with id " + actorId + " does not exist.");
         }
 
         // Связываем фильм с актёром через таблицу Film_Actor
-        linkEntities(filmId, actorId);
+        linkEntities(filmId, actorId);  // Передаём filmId первым
     }
 }
