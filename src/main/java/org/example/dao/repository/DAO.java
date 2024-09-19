@@ -22,13 +22,19 @@ public interface DAO<T> {
     List<T> getAll() throws SQLException;
 
     static void linkEntities(int filmId, int actorId) throws SQLException {
+
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
         String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
 
-        try (Connection connection = DBConnectManager.getConnection();
-             PreparedStatement eStatement = connection.prepareStatement(existLinkQuery);
-             PreparedStatement iStatement = connection.prepareStatement(insertQuery)) {
+        Connection connection = null;
+        PreparedStatement eStatement = null;
+        PreparedStatement iStatement = null;
 
+        try {
+            connection = DBConnectManager.getConnection();
+            eStatement = connection.prepareStatement(existLinkQuery);
+            iStatement = connection.prepareStatement(insertQuery);
+            connection.setAutoCommit(false);
             // Проверка, существует ли уже такая связь
             eStatement.setInt(1, filmId);
             eStatement.setInt(2, actorId);
@@ -43,7 +49,19 @@ public interface DAO<T> {
                 iStatement.setInt(1, filmId);  // Порядок правильный: filmId -> actorId
                 iStatement.setInt(2, actorId);
                 iStatement.executeUpdate();
+                connection.commit();
             }
+        } catch (SQLException e) {
+            try {
+                if (connection != null) connection.rollback();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            throw e;  // Пробрасываем исключение дальше
+        } finally {
+            if (iStatement != null) iStatement.close();
+            if (eStatement != null) eStatement.close();
+            if (connection != null) connection.close();
         }
     }
 

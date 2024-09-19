@@ -1,20 +1,8 @@
 package org.example;
 
-import org.example.dao.repository.ActorDAO;
-import org.example.dao.repository.DAO;
-import org.example.dao.repository.FilmDAO;
-import org.example.dao.repository.util.EntityExistenceChecker;
 import org.example.model.Actor;
-import org.example.model.Entity;
-import org.example.model.Film;
 
 import org.example.service.*;
-import org.example.servlet.ActorServlet;
-import org.example.servlet.dto.ActorDTO;
-import org.example.servlet.dto.DTO;
-import org.example.servlet.mapper.ActorMapper;
-import org.example.servlet.mapper.Mapper;
-import org.example.servlet.mapper.factory.MapperFactoryImp;
 
 import java.sql.SQLException;
 
@@ -149,20 +137,11 @@ public class Main {
        // } catch (SQLException e) {
        //     e.printStackTrace();
         //}
+Actor actor = new Actor();
+actor.setId(1000);
+actor.setName("Leonardo DiCaprio");
 
+        new ActorServiceImpl().update(actor);
 
-        ActorService serviceA = new ActorServiceImpl();
-        Actor actor = new Actor();
-        actor.setName("testActor");
-        serviceA.create(actor);
-        System.out.println(serviceA.getById(actor.getId()));
-
-        FilmService serviceF = new FilmServiceImpl();
-        Film film = new Film();
-        film.setTitle("testFilm");
-        serviceF.create(film);
-        System.out.println(serviceF.getById(film.getId()));
-
-        DAO.linkFilmWithActor( film.getId(),actor.getId());
     }
 }

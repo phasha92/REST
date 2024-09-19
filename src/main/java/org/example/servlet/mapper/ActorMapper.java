@@ -15,7 +15,6 @@ public class ActorMapper implements Mapper {
     public ActorDTO toDTO(Entity entity) {
         if (entity instanceof Actor actor) {
             List<String> filmTitles = actor.getFilms().stream()
-                    //.map((object) -> (Film) object)
                     .map(Film::getTitle)
                     .collect(Collectors.toList());
             return new ActorDTO(actor.getId(), actor.getName(), filmTitles);
