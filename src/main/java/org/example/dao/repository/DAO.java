@@ -21,7 +21,7 @@ public interface DAO<T> {
 
     List<T> getAll() throws SQLException;
 
-    private void linkEntities(int firstId, int secondId) throws SQLException {
+    default void linkEntities(int firstId, int secondId) throws SQLException {
 
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
         String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
@@ -39,9 +39,7 @@ public interface DAO<T> {
                 iStatement.setInt(1, firstId);
                 iStatement.setInt(2, secondId);
                 iStatement.executeUpdate();
-
             }
-
         }
     }
 

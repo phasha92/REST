@@ -1,27 +1,26 @@
 package org.example;
 
-import org.example.dao.DBConnectManager;
 import org.example.dao.repository.ActorDAO;
-import org.example.dao.repository.DAO;
 import org.example.dao.repository.FilmDAO;
 import org.example.dao.repository.util.EntityExistenceChecker;
+import org.example.model.Actor;
 import org.example.model.Entity;
+import org.example.model.Film;
+
+import org.example.service.ActorService;
+import org.example.service.ActorServiceImpl;
+import org.example.service.FilmServiceImpl;
 import org.example.servlet.ActorServlet;
 import org.example.servlet.dto.ActorDTO;
 import org.example.servlet.dto.DTO;
-import org.example.model.Actor;
-import org.example.model.Film;
-
+import org.example.servlet.mapper.ActorMapper;
 import org.example.servlet.mapper.Mapper;
-import org.example.servlet.mapper.factory.MapperFactory;
 import org.example.servlet.mapper.factory.MapperFactoryImp;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 /*
         // Создание актеров
         Actor actor1 = new Actor();
@@ -68,6 +67,7 @@ public class Main {
         mapper = factory.getMapperForDTO(actorDTO);
         System.out.println(mapper.toEntity(actorDTO));
 */
+        /*
         ActorDAO actorDAO = new ActorDAO();
 
         try {
@@ -140,16 +140,24 @@ public class Main {
             Film newFilm = new Film();
             newFilm.setTitle("Peanuts");
             filmDAO.create(newFilm);
-
+*/
            // actorDAO.linkFilmWithActor(1, 1);
 
-            for (int i = 0; i < 100; i++) {
-                System.out.println(i+"->"+EntityExistenceChecker.isExist("actor", i));
-            }
+
+       // System.out.println(new ActorServiceImpl().getById(4));
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+       // } catch (SQLException e) {
+       //     e.printStackTrace();
+        //}
+
+        Mapper mapper = new ActorMapper();
+        ActorService service = new ActorServiceImpl();
+        Entity actor = service.getById(4);
+        System.out.println(actor);
+        DTO dto = mapper.toDTO(actor);
+        System.out.println(dto);
+        actor = mapper.toEntity(dto);
+        System.out.println(actor);
     }
 }
