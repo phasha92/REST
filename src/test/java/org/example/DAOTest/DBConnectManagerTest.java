@@ -1,5 +1,6 @@
 package org.example.DAOTest;
 
+import org.example.dao.DBConnectManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
