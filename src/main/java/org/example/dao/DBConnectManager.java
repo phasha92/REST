@@ -14,6 +14,27 @@ public class DBConnectManager {
     private static HikariDataSource dataSource;
     private static HikariConfig config;
 
+    // Пустой конструктор
+    public DBConnectManager() {
+        // Оставляем логику статического блока для инициализации
+    }
+
+    // Конструктор с параметрами
+    public DBConnectManager(String url, String user, String password) {
+        try {
+            config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(user);
+            config.setPassword(password);
+            config.setConnectionTimeout(50000);
+            config.setMaximumPoolSize(100);
+
+            dataSource = new HikariDataSource(config);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize connection pool", e);
+        }
+    }
+
     static {
         Properties properties = new Properties();
 
@@ -41,6 +62,9 @@ public class DBConnectManager {
     }
 
     public static Connection getConnection() throws SQLException {
+        if (dataSource == null) {
+            throw new IllegalStateException("DataSource has not been initialized.");
+        }
         return dataSource.getConnection();
     }
 }
