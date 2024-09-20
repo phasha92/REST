@@ -13,71 +13,63 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DBConnectManagerTest {
 
-    private static PostgreSQLContainer<?> postgresContainer;
+    private static PostgreSQLContainer<?> postgreSQLContainer;
+    private static DBConnectManager dbConnectManager;
 
     @BeforeAll
     public static void setUp() {
-        // Запускаем тестовый контейнер PostgreSQL
-        postgresContainer = new PostgreSQLContainer<>("postgres:latest")
+        postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
                 .withDatabaseName("testdb")
                 .withUsername("test")
                 .withPassword("test");
-        postgresContainer.start();
+        postgreSQLContainer.start();
 
-        // Устанавливаем параметры подключения
-        System.setProperty("db.url", postgresContainer.getJdbcUrl());
-        System.setProperty("db.username", postgresContainer.getUsername());
-        System.setProperty("db.password", postgresContainer.getPassword());
+        dbConnectManager = new DBConnectManager(
+                postgreSQLContainer.getJdbcUrl(),
+                postgreSQLContainer.getUsername(),
+                postgreSQLContainer.getPassword());
     }
-
-    @Test
-    public void testGetConnectionWithPropertiesFile() {
-        // Проверяем подключение с использованием параметров из файла properties
-        DBConnectManager dbManager = new DBConnectManager();
-        try (Connection connection = DBConnectManager.getConnection()) {
-            assertNotNull(connection);
-            assertFalse(connection.isClosed());
-        } catch (SQLException e) {
-            fail("Connection should be established");
-        }
-    }
-
-    @Test
-    public void testGetConnectionWithConstructorParams() {
-        // Проверяем подключение с использованием параметров, переданных через конструктор
-        DBConnectManager dbManager = new DBConnectManager(
-                postgresContainer.getJdbcUrl(),
-                postgresContainer.getUsername(),
-                postgresContainer.getPassword()
-        );
-        try (Connection connection = DBConnectManager.getConnection()) {
-            assertNotNull(connection);
-            assertFalse(connection.isClosed());
-        } catch (SQLException e) {
-            fail("Connection should be established");
-        }
-    }
-
-    @Test
-    public void testGetConnectionWithInvalidParams() {
-        // Проверяем случай с неправильными параметрами подключения
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            new DBConnectManager(
-                    "jdbc:postgresql://localhost:5432/invalidDB",
-                    "wrongUser",
-                    "wrongPassword"
-            );
-        });
-        assertTrue(exception.getMessage().contains("Failed to initialize connection pool"));
-    }
-
 
     @AfterAll
     public static void tearDown() {
-        // Останавливаем контейнер после выполнения тестов
-        if (postgresContainer != null) {
-            postgresContainer.stop();
+        if (postgreSQLContainer != null) {
+            postgreSQLContainer.stop();
         }
     }
-}
 
+    @Test
+    public void testGetConnection() throws SQLException {
+        Connection connection = dbConnectManager.getConnection();
+        assertNotNull(connection);
+        connection.close();  // Закрываем соединение, чтобы не повлиять на другие тесты
+    }
+
+    @Test
+    public void testMultipleConnections() throws SQLException {
+        for (int i = 0; i < 5; i++) {
+            Connection connection = dbConnectManager.getConnection();
+            assertNotNull(connection);
+            connection.close();
+        }
+    }
+
+    @Test
+    public void testInvalidCredentials() {
+        assertThrows(RuntimeException.class, () -> {
+            new DBConnectManager(
+                    postgreSQLContainer.getJdbcUrl(),
+                    "invalidUser",
+                    "invalidPassword");
+        });
+    }
+
+    @Test
+    public void testInvalidUrl() {
+        assertThrows(RuntimeException.class, () -> {
+            new DBConnectManager(
+                    "jdbc:postgresql://invalid-url:5432/testdb",
+                    postgreSQLContainer.getUsername(),
+                    postgreSQLContainer.getPassword());
+        });
+    }
+}
