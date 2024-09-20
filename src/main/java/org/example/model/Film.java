@@ -14,7 +14,7 @@ public class Film extends Entity {
         super(id);
         this.title = title;
         this.releaseYear = releaseYear;
-        this.actors = new ArrayList<>(actors);  // Копируем список при создании объекта
+        this.actors = actors != null ? new ArrayList<>(actors) : new ArrayList<>();
     }
 
     public Film() {
@@ -42,7 +42,7 @@ public class Film extends Entity {
     }
 
     public void setActors(List<Actor> actors) {
-        this.actors = actors;
+        this.actors = actors != null ? actors : new ArrayList<>();;
     }
 
     @Override

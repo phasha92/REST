@@ -13,7 +13,7 @@ public class Actor extends Entity {
     public Actor(int id, String name, List<Film> films) {
         super(id);
         this.name = name;
-        this.films = new ArrayList<>(films);  // Копируем список при создании объекта
+        this.films = films != null ? new ArrayList<>(films) : new ArrayList<>();
     }
 
     public Actor() {
@@ -29,7 +29,7 @@ public class Actor extends Entity {
     }
 
     public void setFilms(List<Film> films) {
-        this.films = films;
+        this.films = films != null ? films : new ArrayList<>();
     }
 
     // Возвращаем неизменяемый список
@@ -47,7 +47,7 @@ public class Actor extends Entity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, films);
+        return Objects.hashCode(id);
     }
 
     @Override
