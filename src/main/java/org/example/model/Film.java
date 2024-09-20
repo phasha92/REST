@@ -42,7 +42,7 @@ public class Film extends Entity {
     }
 
     public void setActors(List<Actor> actors) {
-        this.actors = actors != null ? actors : new ArrayList<>();;
+        this.actors = actors != null ? actors : new ArrayList<>();
     }
 
     @Override

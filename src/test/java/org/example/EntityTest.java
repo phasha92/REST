@@ -94,26 +94,27 @@ public class EntityTest {
         Actor actor1 = new Actor(1, "John Doe", null);
         Actor actor2 = new Actor(1, "Jane Doe", null);
         Actor actor3 = new Actor(2, "John Doe", null);
-        assertEquals(actor1, actor1, "Объект должен быть равен сам себе");
-        assertNotEquals(null, actor1, "Объект не должен быть равен null");
+        assertEquals(actor1, actor1, "Object should be equal to itself");
+        assertNotEquals(null, actor1, "Object should not be equal to null");
         Film film = new Film(1, "Some Movie", 2020, null);
-        assertNotEquals(actor1, film, "Объект не должен быть равен объекту другого класса");
-        assertEquals(actor1, actor2, "Объекты с одинаковыми id должны быть равны");
-        assertEquals(actor1.hashCode(), actor2.hashCode(), "Хэш-коды объектов с одинаковыми id должны совпадать");
-        assertNotEquals(actor1, actor3, "Объекты с разными id не должны быть равны");
-        assertNotEquals(actor1.hashCode(), actor3.hashCode(), "Хэш-коды объектов с разными id не должны совпадать");
+        assertNotEquals(actor1, film, "Object should not be equal to an object of another class");
+        assertEquals(actor1, actor2, "Objects with the same id should be equal");
+        assertEquals(actor1.hashCode(), actor2.hashCode(), "Hash codes of objects with the same id should match");
+        assertNotEquals(actor1, actor3, "Objects with different ids should not be equal");
+        assertNotEquals(actor1.hashCode(), actor3.hashCode(), "Hash codes of objects with different ids should not match");
 
         Film film1 = new Film(1, "Inception", 2010, null);
         Film film2 = new Film(1, "Interstellar", 2014, null);
         Film film3 = new Film(2, "Inception", 2010, null);
-        assertEquals(film1, film1, "Объект должен быть равен сам себе");
-        assertNotEquals(null, film1, "Объект не должен быть равен null");
+        assertEquals(film1, film1, "Object should be equal to itself");
+        assertNotEquals(null, film1, "Object should not be equal to null");
         Actor actor = new Actor(1, "John Doe", null);
-        assertNotEquals(film1, actor, "Объект не должен быть равен объекту другого класса");
-        assertEquals(film1, film2, "Объекты с одинаковыми id должны быть равны");
-        assertEquals(film1.hashCode(), film2.hashCode(), "Хэш-коды объектов с одинаковыми id должны совпадать");
-        assertNotEquals(film1, film3, "Объекты с разными id не должны быть равны");
-        assertNotEquals(film1.hashCode(), film3.hashCode(), "Хэш-коды объектов с разными id не должны совпадать");
+        assertNotEquals(film1, actor, "Object should not be equal to an object of another class");
+        assertEquals(film1, film2, "Objects with the same id should be equal");
+        assertEquals(film1.hashCode(), film2.hashCode(), "Hash codes of objects with the same id should match");
+        assertNotEquals(film1, film3, "Objects with different ids should not be equal");
+        assertNotEquals(film1.hashCode(), film3.hashCode(), "Hash codes of objects with different ids should not match");
+
     }
 
 
