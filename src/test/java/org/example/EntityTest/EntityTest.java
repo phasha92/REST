@@ -1,4 +1,4 @@
-package org.example;
+package org.example.EntityTest;
 
 import org.example.model.Actor;
 import org.example.model.Film;
