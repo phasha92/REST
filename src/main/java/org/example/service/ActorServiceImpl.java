@@ -1,23 +1,29 @@
 package org.example.service;
 
 import org.example.dao.repository.ActorDAO;
-import org.example.dao.repository.DAO;
 import org.example.model.Actor;
+
+import org.example.servlet.dto.ActorDTO;
+import org.example.servlet.mapper.ActorMapper;
+import org.example.servlet.mapper.Mapper;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class ActorServiceImpl implements ActorService {
 
-    private final DAO<Actor> dao = new ActorDAO();
+    private final ActorDAO dao = new ActorDAO();
+    private final Mapper mapper = new ActorMapper();
 
     @Override
-    public void create(Actor actor) throws SQLException {
+    public void create(ActorDTO actorDTO) throws SQLException {
+        Actor actor = (Actor) mapper.toEntity(actorDTO);
         dao.create(actor);
     }
 
     @Override
-    public void update(Actor actor) throws SQLException {
+    public void update(ActorDTO actorDTO) throws SQLException {
+        Actor actor = (Actor) mapper.toEntity(actorDTO);
         dao.update(actor);
     }
 
@@ -34,5 +40,10 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public List<Actor> getAll() throws SQLException {
         return dao.getAll();
+    }
+
+    @Override
+    public void addFilmToActor(int actorId, int filmId) throws SQLException {
+        dao.linkFilmWithActor(filmId, actorId);  // Добавляем связь актёра и фильма
     }
 }

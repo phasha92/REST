@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmDAO implements DAO<Film> {
+public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
 
     // Создание нового фильма
     @Override
@@ -180,4 +180,5 @@ public class FilmDAO implements DAO<Film> {
         }
         return actors;
     }
+
 }

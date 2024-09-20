@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Film extends Entity {
     private String title;
     private int releaseYear;
-    private List<Actor> actors;  // Список актеров
+    private List<Actor> actors = new ArrayList<>();  // Список актеров
 
     public Film(int id, String title, int releaseYear, List<Actor> actors) {
         super(id);

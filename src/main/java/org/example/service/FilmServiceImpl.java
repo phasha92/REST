@@ -1,23 +1,28 @@
 package org.example.service;
 
-import org.example.dao.repository.DAO;
 import org.example.dao.repository.FilmDAO;
 import org.example.model.Film;
+import org.example.servlet.dto.FilmDTO;
+import org.example.servlet.mapper.FilmMapper;
+import org.example.servlet.mapper.Mapper;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class FilmServiceImpl implements FilmService {
 
-    private DAO<Film> dao = new FilmDAO();
+    private final FilmDAO dao = new FilmDAO();
+    private final Mapper mapper = new FilmMapper();
 
     @Override
-    public void create(Film film) throws SQLException {
+    public void create(FilmDTO filmDTO) throws SQLException {
+        Film film = (Film) mapper.toEntity(filmDTO);
         dao.create(film);
     }
 
     @Override
-    public void update(Film film) throws SQLException {
+    public void update(FilmDTO filmDTO) throws SQLException {
+        Film film = (Film) mapper.toEntity(filmDTO);
         dao.update(film);
     }
 
@@ -34,6 +39,11 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> getAll() throws SQLException {
         return dao.getAll();
+    }
+
+    @Override
+    public void addActorToFilm(int filmId, int actorId) throws SQLException {
+        dao.linkFilmWithActor(filmId, actorId);  // Добавляем связь
     }
 
 }

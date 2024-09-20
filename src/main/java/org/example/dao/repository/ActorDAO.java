@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActorDAO implements DAO<Actor> {
+public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
 
     // Создание нового актера
     @Override
@@ -178,6 +178,7 @@ public class ActorDAO implements DAO<Actor> {
         }
         return films;
     }
+
 }
 
 
