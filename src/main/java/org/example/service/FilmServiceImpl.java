@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.dao.repository.FilmDAO;
+import org.example.DAOTest.RepositoryTest.FilmDAO;
 import org.example.model.Film;
 import org.example.servlet.dto.FilmDTO;
 import org.example.servlet.mapper.FilmMapper;

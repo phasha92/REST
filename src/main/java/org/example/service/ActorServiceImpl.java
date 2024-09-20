@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.dao.repository.ActorDAO;
+import org.example.DAOTest.RepositoryTest.ActorDAO;
 import org.example.model.Actor;
 
 import org.example.servlet.dto.ActorDTO;
