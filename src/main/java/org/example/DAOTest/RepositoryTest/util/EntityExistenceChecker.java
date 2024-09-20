@@ -1,6 +1,6 @@
-package org.example.dao.repository.util;
+package org.example.DAOTest.RepositoryTest.util;
 
-import org.example.dao.DBConnectManager;
+import org.example.DAOTest.DBConnectManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

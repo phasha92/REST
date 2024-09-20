@@ -1,8 +1,8 @@
-package org.example.dao.repository;
+package org.example.DAOTest.RepositoryTest;
 
-import org.example.dao.DBConnectManager;
-import org.example.dao.repository.query.LinkedQuery;
-import org.example.dao.repository.util.EntityExistenceChecker;
+import org.example.DAOTest.DBConnectManager;
+import org.example.DAOTest.RepositoryTest.query.LinkedQuery;
+import org.example.DAOTest.RepositoryTest.util.EntityExistenceChecker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

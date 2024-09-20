@@ -1,4 +1,4 @@
-package org.example.dao.repository;
+package org.example.DAOTest.RepositoryTest;
 
 import java.sql.SQLException;
 import java.util.List;
