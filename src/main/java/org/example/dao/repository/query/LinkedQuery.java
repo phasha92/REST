@@ -1,4 +1,4 @@
-package org.example.DAOTest.RepositoryTest.query;
+package org.example.dao.repository.query;
 
 public enum LinkedQuery {
     EXIST_LINK("SELECT COUNT(*) FROM Film_Actor WHERE film_id = ? AND actor_id = ?"),

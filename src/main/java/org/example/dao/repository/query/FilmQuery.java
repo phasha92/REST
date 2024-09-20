@@ -1,4 +1,4 @@
-package org.example.DAOTest.RepositoryTest.query;
+package org.example.dao.repository.query;
 
 public enum FilmQuery {
     CREATE("INSERT INTO Film (title, release_year) VALUES (?, ?)"),

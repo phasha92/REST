@@ -1,4 +1,4 @@
-package org.example.DAOTest.RepositoryTest.query;
+package org.example.dao.repository.query;
 
 public enum ActorQuery {
     CREATE("INSERT INTO Actor (name) VALUES (?)"),
