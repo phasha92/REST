@@ -11,19 +11,24 @@ import java.util.List;
 
 public class FilmDAO implements DAO<Film>{
 
-    private final DBConnectManager connectManager = new DBConnectManager();
+    private final DBConnectManager connectManager;
+
+    public FilmDAO(){
+        this.connectManager = new DBConnectManager();
+    }
+
+    public FilmDAO(DBConnectManager connectManager){
+        this.connectManager = connectManager;
+    }
 
     @Override
     public void create(Film film) throws SQLException {
 
         String query = FilmQuery.CREATE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            connection.setAutoCommit(false);
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+
             statement.setString(1, film.getTitle());
             statement.setInt(2, film.getReleaseYear());
             statement.executeUpdate();
@@ -34,19 +39,6 @@ public class FilmDAO implements DAO<Film>{
                     film.setId(generatedKeys.getInt(1));
                 }
             }
-
-            connection.commit();
-
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();  // Откат транзакции в случае ошибки
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -101,30 +93,14 @@ public class FilmDAO implements DAO<Film>{
     public void update(Film film) throws SQLException {
 
         String query = FilmQuery.UPDATE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
+
+        try(Connection connection = connectManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, film.getTitle());
             statement.setInt(2, film.getReleaseYear());
             statement.setInt(3, film.getId());
             statement.executeUpdate();
-
-            connection.commit();
-
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();  // Откат транзакции в случае ошибки
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;  // Пробрасываем исключение дальше
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -132,31 +108,16 @@ public class FilmDAO implements DAO<Film>{
     public void delete(int id) throws SQLException {
 
         String query = FilmQuery.DELETE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
+        try ( Connection connection = connectManager.getConnection();
+              PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, id);
             statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;  // Пробрасываем исключение дальше
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
     // Получение актеров для фильма по его ID
-    private List<Actor> getActorsByFilmId(int filmId) throws SQLException {
+    public List<Actor> getActorsByFilmId(int filmId) throws SQLException {
 
         String query = FilmQuery.GET_ACTORS_BY_FILM_ID.getQuery();
         List<Actor> actors = new ArrayList<>();
@@ -177,5 +138,4 @@ public class FilmDAO implements DAO<Film>{
         }
         return actors;
     }
-
 }

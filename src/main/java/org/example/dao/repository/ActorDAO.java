@@ -11,19 +11,22 @@ import java.util.List;
 
 public class ActorDAO implements DAO<Actor> {
 
-    private final DBConnectManager connectManager = new DBConnectManager();
+    private final DBConnectManager connectManager;
+
+    public ActorDAO(DBConnectManager connectManager) {
+        this.connectManager = connectManager;
+    }
+
+    public ActorDAO() {
+        this.connectManager = new DBConnectManager();
+    }
 
     @Override
     public void create(Actor actor) throws SQLException {
 
         String query = ActorQuery.CREATE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            connection.setAutoCommit(false);
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, actor.getName());
             statement.executeUpdate();
 
@@ -33,19 +36,6 @@ public class ActorDAO implements DAO<Actor> {
                     actor.setId(generatedKeys.getInt(1));  // Устанавливаем ID в объект Actor
                 }
             }
-
-            connection.commit(); // подтверждаем транзакцию/ или откат
-
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();  // Откат транзакции в случае ошибки
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;  // Пробрасываем исключение дальше
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -75,29 +65,13 @@ public class ActorDAO implements DAO<Actor> {
     public void update(Actor actor) throws SQLException {
 
         String query = ActorQuery.UPDATE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, actor.getName());
             statement.setInt(2, actor.getId());
             statement.executeUpdate();
-
-            connection.commit();
-
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -105,26 +79,11 @@ public class ActorDAO implements DAO<Actor> {
     public void delete(int id) throws SQLException {
 
         String query = ActorQuery.DELETE.getQuery();
-        Connection connection = null;
-        PreparedStatement statement = null;
 
-        try {
-            connection = connectManager.getConnection();
-            statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -153,7 +112,7 @@ public class ActorDAO implements DAO<Actor> {
     }
 
     // Получение фильмов для актера по его ID
-    private List<Film> getFilmsByActorId(int actorId) throws SQLException {
+    public List<Film> getFilmsByActorId(int actorId) throws SQLException {
 
         String query = ActorQuery.GET_FILMS_BY_ACTOR_ID.getQuery();
         List<Film> films = new ArrayList<>();

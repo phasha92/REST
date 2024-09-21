@@ -41,7 +41,6 @@ public class LinkActorWithFilmTest {
             statement.execute("INSERT INTO Film (id) VALUES (1);");
             statement.execute("INSERT INTO Actor (id) VALUES (1);");
         }
-
         linkActorWithFilm = new LinkActorWithFilm(dbConnectManager);
     }
 
@@ -81,6 +80,7 @@ public class LinkActorWithFilmTest {
         // Проверяем сообщение исключения
         assertEquals("Actor with id 2222 does not exist.", exception.getMessage());
     }
+
 
 
     @AfterEach
