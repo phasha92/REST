@@ -10,14 +10,9 @@ import java.util.Properties;
 
 public class DBConnectManager {
 
-    private static HikariDataSource dataSource;
+    private HikariDataSource dataSource;
 
-    // Конструктор с параметрами(для тестов)
-    public DBConnectManager(String url, String user, String password) {
-        initializeDataSource(url, user, password);
-    }
-
-    static {
+    public DBConnectManager() {
         Properties properties = new Properties();
         try (InputStream input = DBConnectManager.class.getClassLoader().getResourceAsStream("db.properties")) {
             if (input == null) {
@@ -34,8 +29,13 @@ public class DBConnectManager {
         }
     }
 
+    // Конструктор с параметрами(для тестов)
+    public DBConnectManager(String url, String user, String password) {
+        initializeDataSource(url, user, password);
+    }
+
     // Универсальный метод для инициализации dataSource
-    private static void initializeDataSource(String url, String user, String password) {
+    private void initializeDataSource(String url, String user, String password) {
         try {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(url);
@@ -45,15 +45,29 @@ public class DBConnectManager {
             config.setMaximumPoolSize(30);
             dataSource = new HikariDataSource(config);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize connection pool", e);
+            throw new IllegalArgumentException("Failed to initialize connection pool", e);
         }
     }
 
     // Получение соединения
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         if (dataSource == null) {
             throw new IllegalStateException("DataSource has not been initialized.");
         }
         return dataSource.getConnection();
+    }
+
+    // Метод для закрытия пула соединений
+    public void closeDataSource() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
+    }
+    public boolean isClosed(){
+        return dataSource.isClosed();
+    }
+
+    public HikariDataSource getDataSource(){
+        return dataSource;
     }
 }

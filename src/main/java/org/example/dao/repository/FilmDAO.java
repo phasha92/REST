@@ -9,7 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
+public class FilmDAO implements DAO<Film>{
+
+    private final DBConnectManager connectManager = new DBConnectManager();
 
     @Override
     public void create(Film film) throws SQLException {
@@ -19,7 +21,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         PreparedStatement statement = null;
 
         try {
-            connection = DBConnectManager.getConnection();
+            connection = connectManager.getConnection();
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             connection.setAutoCommit(false);
             statement.setString(1, film.getTitle());
@@ -54,7 +56,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         String query = FilmQuery.GET_BY_ID.getQuery();
         Film film = null;
 
-        try (Connection connection = DBConnectManager.getConnection();
+        try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, id);
@@ -78,7 +80,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         String query = FilmQuery.GET_ALL.getQuery();
         List<Film> films = new ArrayList<>();
 
-        try (Connection connection = DBConnectManager.getConnection();
+        try (Connection connection = connectManager.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -103,7 +105,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         PreparedStatement statement = null;
 
         try {
-            connection = DBConnectManager.getConnection();
+            connection = connectManager.getConnection();
             statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
             statement.setString(1, film.getTitle());
@@ -134,7 +136,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         PreparedStatement statement = null;
 
         try {
-            connection = DBConnectManager.getConnection();
+            connection = connectManager.getConnection();
             statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
             statement.setInt(1, id);
@@ -159,7 +161,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         String query = FilmQuery.GET_ACTORS_BY_FILM_ID.getQuery();
         List<Actor> actors = new ArrayList<>();
 
-        try (Connection connection = DBConnectManager.getConnection();
+        try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, filmId);

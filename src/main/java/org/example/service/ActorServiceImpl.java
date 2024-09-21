@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dao.repository.ActorDAO;
+import org.example.dao.repository.LinkActorWithFilm;
 import org.example.model.Actor;
 
 import org.example.servlet.dto.ActorDTO;
@@ -44,6 +45,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void addFilmToActor(int actorId, int filmId) throws SQLException {
-        dao.linkFilmWithActor(filmId, actorId);  // Добавляем связь актёра и фильма
+        new LinkActorWithFilm().linkFilmWithActor(filmId, actorId);  // Добавляем связь актёра и фильма
     }
 }

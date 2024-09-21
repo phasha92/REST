@@ -8,12 +8,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EntityExistenceChecker {
-    private EntityExistenceChecker(){}
 
-    public static boolean isExist(String tableName, int id) throws SQLException {
+    public DBConnectManager getConnectManager() {
+        return connectManager;
+    }
+
+    DBConnectManager connectManager;
+
+    public EntityExistenceChecker(DBConnectManager connectManager) {
+        this.connectManager = connectManager;
+    }
+
+    public EntityExistenceChecker(){
+        this.connectManager = new DBConnectManager();
+    }
+
+    public boolean isExist(String tableName, int id) throws SQLException {
+
         String query = "SELECT COUNT(*) FROM " + tableName + " WHERE id = ?";  // Используем имя таблицы
 
-        try (Connection connection = DBConnectManager.getConnection();
+        try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, id);

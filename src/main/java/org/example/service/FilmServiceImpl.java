@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dao.repository.FilmDAO;
+import org.example.dao.repository.LinkActorWithFilm;
 import org.example.model.Film;
 import org.example.servlet.dto.FilmDTO;
 import org.example.servlet.mapper.FilmMapper;
@@ -43,7 +44,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void addActorToFilm(int filmId, int actorId) throws SQLException {
-        dao.linkFilmWithActor(filmId, actorId);  // Добавляем связь
+        new LinkActorWithFilm().linkFilmWithActor(filmId, actorId);  // Добавляем связь
     }
 
 }

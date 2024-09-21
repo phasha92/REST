@@ -9,13 +9,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public interface LinkActorWithFilm {
-    default void linkEntities(int filmId, int actorId) throws SQLException {
+public class LinkActorWithFilm {
+
+    private final DBConnectManager connectManager;
+
+    public LinkActorWithFilm(DBConnectManager connectManager) {
+        this.connectManager = connectManager;
+    }
+
+    public LinkActorWithFilm() {
+        this.connectManager = new DBConnectManager();
+    }
+
+    public void linkEntities(int filmId, int actorId) throws SQLException {
 
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
         String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
 
-        try (Connection connection = DBConnectManager.getConnection();
+        try (Connection connection = connectManager.getConnection();
              PreparedStatement eStatement = connection.prepareStatement(existLinkQuery);
              PreparedStatement iStatement = connection.prepareStatement(insertQuery)) {
 
@@ -35,13 +46,15 @@ public interface LinkActorWithFilm {
         }
     }
 
-    default void linkFilmWithActor(int filmId, int actorId) throws SQLException {
+    public void linkFilmWithActor(int filmId, int actorId) throws SQLException {
+
+        EntityExistenceChecker checker = new EntityExistenceChecker();
         // Проверка существования фильма и актёра
-        if (!EntityExistenceChecker.isExist("Film", filmId)) {
+        if (!checker.isExist("Film", filmId)) {
             throw new SQLException("Film with id " + filmId + " does not exist.");
         }
 
-        if (!EntityExistenceChecker.isExist("Actor", actorId)) {
+        if (!checker.isExist("Actor", actorId)) {
             throw new SQLException("Actor with id " + actorId + " does not exist.");
         }
 
