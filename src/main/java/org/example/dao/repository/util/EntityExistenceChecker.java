@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EntityExistenceChecker {
+    private EntityExistenceChecker(){}
 
     public static boolean isExist(String tableName, int id) throws SQLException {
         String query = "SELECT COUNT(*) FROM " + tableName + " WHERE id = ?";  // Используем имя таблицы

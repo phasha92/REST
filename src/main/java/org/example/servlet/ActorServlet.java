@@ -1,7 +1,6 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,7 +18,7 @@ import java.util.List;
 @WebServlet("/actors/*")
 public class ActorServlet extends HttpServlet {
 
-    private ActorService actorService;
+    private transient ActorService actorService;
 
     @Override
     public void init() throws ServletException {

@@ -6,8 +6,6 @@ public abstract class Entity {
     Entity() {
     }
 
-    ;
-
     Entity(int id) {
         this.setId(id);
     }

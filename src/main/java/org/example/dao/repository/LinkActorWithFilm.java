@@ -15,42 +15,23 @@ public interface LinkActorWithFilm {
         String existLinkQuery = LinkedQuery.EXIST_LINK.getQuery();
         String insertQuery = LinkedQuery.INSERT_LINK.getQuery();
 
-        Connection connection = null;
-        PreparedStatement eStatement = null;
-        PreparedStatement iStatement = null;
+        try (Connection connection = DBConnectManager.getConnection();
+             PreparedStatement eStatement = connection.prepareStatement(existLinkQuery);
+             PreparedStatement iStatement = connection.prepareStatement(insertQuery)) {
 
-        try {
-            connection = DBConnectManager.getConnection();
-            eStatement = connection.prepareStatement(existLinkQuery);
-            iStatement = connection.prepareStatement(insertQuery);
-            connection.setAutoCommit(false);
             // Проверка, существует ли уже такая связь
             eStatement.setInt(1, filmId);
             eStatement.setInt(2, actorId);
             try (ResultSet res = eStatement.executeQuery()) {
-                if (res.next()) {
-                    if (res.getInt(1) > 0) {
-                        throw new SQLException("Film id(" + filmId + ") and actor id(" + actorId + ") are already linked");
-                    }
+                if (res.next() && res.getInt(1) > 0) {
+                    throw new SQLException("Film id(" + filmId + ") and actor id(" + actorId + ") are already linked");
                 }
 
                 // Если связи нет, то добавляем её
-                iStatement.setInt(1, filmId);  // Порядок правильный: filmId -> actorId
+                iStatement.setInt(1, filmId);
                 iStatement.setInt(2, actorId);
                 iStatement.executeUpdate();
-                connection.commit();
             }
-        } catch (SQLException e) {
-            try {
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-            throw e;  // Пробрасываем исключение дальше
-        } finally {
-            if (iStatement != null) iStatement.close();
-            if (eStatement != null) eStatement.close();
-            if (connection != null) connection.close();
         }
     }
 
@@ -65,6 +46,6 @@ public interface LinkActorWithFilm {
         }
 
         // Связываем фильм с актёром через таблицу Film_Actor
-        linkEntities(filmId, actorId);  // Передаём filmId первым
+        linkEntities(filmId, actorId);
     }
 }

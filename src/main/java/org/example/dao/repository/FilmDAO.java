@@ -11,7 +11,6 @@ import java.util.List;
 
 public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
 
-    // Создание нового фильма
     @Override
     public void create(Film film) throws SQLException {
 
@@ -42,14 +41,13 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
             } catch (SQLException rollbackException) {
                 rollbackException.printStackTrace();
             }
-            throw e;  // Пробрасываем исключение дальше
+            throw e;
         } finally {
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
     }
 
-    // Получение фильма по ID
     @Override
     public Film getById(int id) throws SQLException {
 
@@ -74,7 +72,6 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         return film;
     }
 
-    // Получение всех фильмов
     @Override
     public List<Film> getAll() throws SQLException {
 
@@ -98,7 +95,6 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         return films;
     }
 
-    // Обновление фильма
     @Override
     public void update(Film film) throws SQLException {
 
@@ -130,7 +126,6 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
         }
     }
 
-    // Удаление фильма по ID
     @Override
     public void delete(int id) throws SQLException {
 
@@ -147,7 +142,7 @@ public class FilmDAO implements DAO<Film>,LinkActorWithFilm {
             connection.commit();
         } catch (SQLException e) {
             try {
-                if (connection != null) connection.rollback();  // Откат транзакции в случае ошибки
+                if (connection != null) connection.rollback();
             } catch (SQLException rollbackException) {
                 rollbackException.printStackTrace();
             }

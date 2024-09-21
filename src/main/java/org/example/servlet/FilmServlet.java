@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.model.Film;
-import org.example.service.ActorService;
-import org.example.service.ActorServiceImpl;
 import org.example.service.FilmService;
 import org.example.service.FilmServiceImpl;
 import org.example.servlet.dto.FilmDTO;
@@ -21,7 +19,7 @@ import java.util.List;
 @WebServlet("/films/*")
 public class FilmServlet extends HttpServlet {
 
-    private FilmService filmService;
+    private transient FilmService filmService;
 
     @Override
     public void init() throws ServletException {

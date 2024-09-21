@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
 
-    // Создание нового актера
     @Override
     public void create(Actor actor) throws SQLException {
 
@@ -48,7 +47,6 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
         }
     }
 
-    // Получение актера по ID
     @Override
     public Actor getById(int id) throws SQLException {
 
@@ -62,9 +60,8 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-
                 String name = resultSet.getString("name");
-                List<Film> films = getFilmsByActorId(id);
+                List<Film> films = getFilmsByActorId(id); //Получаем все фильмы с актером
 
                 actor = new Actor(id, name, films);
             }
@@ -72,11 +69,10 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
         return actor;
     }
 
-    // Обновление информации об актере
     @Override
     public void update(Actor actor) throws SQLException {
 
-        String query = ActorQuery.UPDATE.getQuery();  // SQL запрос из Enum
+        String query = ActorQuery.UPDATE.getQuery();
         Connection connection = null;
         PreparedStatement statement = null;
 
@@ -84,8 +80,8 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
             connection = DBConnectManager.getConnection();
             statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
-            statement.setString(1, actor.getName());  // Устанавливаем новое имя
-            statement.setInt(2, actor.getId());       // Устанавливаем ID актера
+            statement.setString(1, actor.getName());
+            statement.setInt(2, actor.getId());
             statement.executeUpdate();
 
             connection.commit();
@@ -96,18 +92,17 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
             } catch (SQLException rollbackException) {
                 rollbackException.printStackTrace();
             }
-            throw e;  // Пробрасываем исключение дальше
+            throw e;
         } finally {
             if (statement != null) statement.close();
             if (connection != null) connection.close();
         }
     }
 
-    // Удаление актера по ID
     @Override
     public void delete(int id) throws SQLException {
 
-        String query = ActorQuery.DELETE.getQuery();  // SQL запрос из Enum
+        String query = ActorQuery.DELETE.getQuery();
         Connection connection = null;
         PreparedStatement statement = null;
 
@@ -115,7 +110,7 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
             connection = DBConnectManager.getConnection();
             statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
-            statement.setInt(1, id);  // Устанавливаем ID актера для удаления
+            statement.setInt(1, id);
             statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -124,7 +119,7 @@ public class ActorDAO implements DAO<Actor>, LinkActorWithFilm {
             } catch (SQLException rollbackException) {
                 rollbackException.printStackTrace();
             }
-            throw e;  // Пробрасываем исключение дальше
+            throw e;
         } finally {
             if (statement != null) statement.close();
             if (connection != null) connection.close();

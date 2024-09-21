@@ -7,7 +7,6 @@ import org.example.model.Film;
 import org.example.servlet.dto.DTO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ActorMapper implements Mapper {
 
@@ -16,10 +15,9 @@ public class ActorMapper implements Mapper {
         if (entity instanceof Actor actor) {
             List<String> filmTitles = actor.getFilms().stream()
                     .map(Film::getTitle)
-                    .collect(Collectors.toList());
+                    .toList();
             return new ActorDTO(actor.getId(), actor.getName(), filmTitles);
         } else throw new IllegalArgumentException("Expected an Actor entity");
-
     }
 
     @Override
