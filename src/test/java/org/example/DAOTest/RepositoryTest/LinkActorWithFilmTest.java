@@ -1,8 +1,10 @@
 package org.example.DAOTest.RepositoryTest;
+
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.LinkActorWithFilm;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -66,15 +68,20 @@ public class LinkActorWithFilmTest {
 
     @Test
     public void testLinkFilmWithActor_FilmDoesNotExist() {
-        SQLException exception = assertThrows(SQLException.class, () -> linkActorWithFilm.linkFilmWithActor(2, 1));
-        assertEquals("Film with id 2 does not exist.", exception.getMessage());
+        // Проверяем, что выбрасывается исключение при попытке привязать несуществующий фильм
+        SQLException exception = assertThrows(SQLException.class, () -> linkActorWithFilm.linkFilmWithActor(2222, 1));
+        assertEquals("Film with id 2222 does not exist.", exception.getMessage());
     }
 
     @Test
     public void testLinkFilmWithActor_ActorDoesNotExist() {
-        SQLException exception = assertThrows(SQLException.class, () -> linkActorWithFilm.linkFilmWithActor(1, 2));
-        assertEquals("Actor with id 2 does not exist.", exception.getMessage());
+        // Проверяем, что выбрасывается исключение при попытке привязать актёра, который не существует
+        SQLException exception = assertThrows(SQLException.class, () -> linkActorWithFilm.linkFilmWithActor(1, 2222));
+
+        // Проверяем сообщение исключения
+        assertEquals("Actor with id 2222 does not exist.", exception.getMessage());
     }
+
 
     @AfterEach
     public void tearDown() throws SQLException {
