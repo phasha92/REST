@@ -58,6 +58,6 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public void addDirectorToFilm(int filmId, int directorId) throws SQLException {
-        directorWithFilm.linkFilmWithDirector(filmId, directorId);  
+        directorWithFilm.linkFilmWithDirector(filmId, directorId);
     }
 }

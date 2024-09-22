@@ -42,8 +42,7 @@ public class DirectorDAO implements DAO<Director> {
     @Override
     public Director getById(int id) throws SQLException {
         String query = DirectorQuery.GET_BY_ID.getQuery();
-        Director director = new Director();
-        director.setName("");
+        Director director = null;
         try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
