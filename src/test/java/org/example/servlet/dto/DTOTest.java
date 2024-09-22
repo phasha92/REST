@@ -1,4 +1,4 @@
-package org.example.DTOTest;
+package org.example.servlet.dto;
 
 import org.example.servlet.dto.ActorDTO;
 import org.example.servlet.dto.FilmDTO;

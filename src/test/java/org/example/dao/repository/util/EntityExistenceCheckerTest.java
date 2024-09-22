@@ -1,7 +1,7 @@
-package org.example.DAOTest.RepositoryTest.UtilTest;
+package org.example.dao.repository.util;
 
 import org.example.dao.DBConnectManager;
-import org.example.dao.repository.util.EntityExistenceChecker;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;

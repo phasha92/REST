@@ -1,7 +1,5 @@
-package org.example.EntityTest;
+package org.example.model;
 
-import org.example.model.Actor;
-import org.example.model.Film;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.example.MapperTest;
+package org.example.servlet.mapper;
 
 import org.example.model.Actor;
 import org.example.model.Film;

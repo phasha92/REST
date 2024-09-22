@@ -1,9 +1,8 @@
-package org.example.DAOTest.RepositoryTest;
+package org.example.dao.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.dao.DBConnectManager;
-import org.example.dao.repository.ActorDAO;
 import org.example.model.Actor;
 
 import org.example.model.Film;

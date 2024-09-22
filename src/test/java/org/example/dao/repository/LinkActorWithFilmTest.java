@@ -1,7 +1,6 @@
-package org.example.DAOTest.RepositoryTest;
+package org.example.dao.repository;
 
 import org.example.dao.DBConnectManager;
-import org.example.dao.repository.LinkActorWithFilm;
 
 import static org.junit.jupiter.api.Assertions.*;
 

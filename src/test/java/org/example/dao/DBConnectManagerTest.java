@@ -1,5 +1,4 @@
-package org.example.DAOTest;
-import org.example.dao.DBConnectManager;
+package org.example.dao;
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.SQLException;
