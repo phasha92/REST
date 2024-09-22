@@ -9,12 +9,14 @@ public class Film extends Entity {
     private String title;
     private int releaseYear;
     private List<Actor> actors = new ArrayList<>();  // Список актеров
+    private Director director;
 
-    public Film(int id, String title, int releaseYear, List<Actor> actors) {
+    public Film(int id, String title, int releaseYear, List<Actor> actors, Director director) {
         super(id);
         this.title = title;
         this.releaseYear = releaseYear;
         this.actors = actors != null ? new ArrayList<>(actors) : new ArrayList<>();
+        this.director = director;
     }
 
     public Film() {
@@ -45,6 +47,14 @@ public class Film extends Entity {
         this.actors = actors != null ? actors : new ArrayList<>();
     }
 
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,10 +71,11 @@ public class Film extends Entity {
     @Override
     public String toString() {
         return "Film{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", releaseYear=" + releaseYear +
                 ", actors=" + actors +
+                ", director=" + director +
+                ", id=" + id +
                 '}';
     }
 }

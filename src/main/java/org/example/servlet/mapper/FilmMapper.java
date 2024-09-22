@@ -1,5 +1,6 @@
 package org.example.servlet.mapper;
 
+import org.example.model.Director;
 import org.example.model.Entity;
 import org.example.servlet.dto.DTO;
 import org.example.servlet.dto.FilmDTO;
@@ -16,14 +17,14 @@ public class FilmMapper implements Mapper {
             List<String> actorNames = film.getActors().stream()
                     .map(Actor::getName)
                     .toList();
-            return new FilmDTO(film.getId(), film.getTitle(), film.getReleaseYear(), actorNames);
+            return new FilmDTO(film.getId(), film.getTitle(), film.getReleaseYear(), actorNames, film.getDirector().getName());
         } else throw new IllegalArgumentException("Expected an Film entity");
     }
 
     @Override
     public Film toEntity(DTO dto) {
         if (dto instanceof FilmDTO filmDTO) {
-            return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of()); // актеры добавляются позже
+            return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of(), new Director()); // актеры добавляются позже
         } else throw new IllegalArgumentException("Expected a FilmDTO");
     }
 }

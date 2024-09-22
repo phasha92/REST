@@ -3,21 +3,22 @@ package org.example.dao.repository;
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.query.FilmQuery;
 import org.example.model.Actor;
+import org.example.model.Director;
 import org.example.model.Film;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmDAO implements DAO<Film>{
+public class FilmDAO implements DAO<Film> {
 
     private final DBConnectManager connectManager;
 
-    public FilmDAO(){
+    public FilmDAO() {
         this.connectManager = new DBConnectManager();
     }
 
-    public FilmDAO(DBConnectManager connectManager){
+    public FilmDAO(DBConnectManager connectManager) {
         this.connectManager = connectManager;
     }
 
@@ -27,13 +28,13 @@ public class FilmDAO implements DAO<Film>{
         String query = FilmQuery.CREATE.getQuery();
 
         try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, film.getTitle());
             statement.setInt(2, film.getReleaseYear());
+            statement.setInt(3, film.getDirector().getId());
             statement.executeUpdate();
 
-            // Получаем сгенерированный ID фильма
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     film.setId(generatedKeys.getInt(1));
@@ -55,15 +56,17 @@ public class FilmDAO implements DAO<Film>{
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-
                 String title = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
+                int directorId = resultSet.getInt("director_id");
+                Director director = getDirectorById(directorId);  // Получаем режиссера
                 List<Actor> actors = getActorsByFilmId(id);  // Получаем актеров для фильма
 
-                film = new Film(id, title, releaseYear, actors);
+                film = new Film(id, title, releaseYear, actors, director);
             }
         }
         return film;
+
     }
 
     @Override
@@ -77,13 +80,16 @@ public class FilmDAO implements DAO<Film>{
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
+                int directorId = resultSet.getInt("director_id");  // Получаем id режиссера
+
                 List<Actor> actors = getActorsByFilmId(id);  // Получаем актеров для фильма
 
-                films.add(new Film(id, title, releaseYear, actors));
+                Director director = getDirectorById(directorId);
+
+                films.add(new Film(id, title, releaseYear, actors, director));
             }
         }
         return films;
@@ -94,12 +100,13 @@ public class FilmDAO implements DAO<Film>{
 
         String query = FilmQuery.UPDATE.getQuery();
 
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-        try(Connection connection = connectManager.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, film.getTitle());
             statement.setInt(2, film.getReleaseYear());
-            statement.setInt(3, film.getId());
+            statement.setInt(3, film.getDirector().getId());  // Обновляем режиссера
+            statement.setInt(4, film.getId());
             statement.executeUpdate();
         }
     }
@@ -109,8 +116,8 @@ public class FilmDAO implements DAO<Film>{
 
         String query = FilmQuery.DELETE.getQuery();
 
-        try ( Connection connection = connectManager.getConnection();
-              PreparedStatement statement = connection.prepareStatement(query)){
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
@@ -138,4 +145,22 @@ public class FilmDAO implements DAO<Film>{
         }
         return actors;
     }
+
+    public Director getDirectorById(int directorId) throws SQLException {
+        String query = FilmQuery.GET_DIRECTOR_BY_FILM_ID.getQuery();
+
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, directorId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String name = resultSet.getString("name");
+                return new Director(directorId, name, List.of());
+            }
+        }
+        return null;
+    }
+
 }

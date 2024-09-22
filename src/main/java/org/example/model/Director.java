@@ -5,18 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+public class Director extends Entity {
 
-public class Actor extends Entity {
     private String name;
-    private List<Film> films = new ArrayList<>();  // Список фильмов
+    private List<Film> films;
 
-    public Actor(int id, String name, List<Film> films) {
+    public Director(int id, String name, List<Film> films) {
         super(id);
         this.name = name;
-        this.films = films != null ? new ArrayList<>(films) : new ArrayList<>();
+        this.films = films != null ? films : new ArrayList<>();
     }
 
-    public Actor() {
+    public Director() {
     }
 
     public String getName() {
@@ -27,21 +27,20 @@ public class Actor extends Entity {
         this.name = name;
     }
 
-    public void setFilms(List<Film> films) {
-        this.films = films != null ? films : new ArrayList<>();
+    public List<Film> getFilms() {
+        return Collections.unmodifiableList(films);
     }
 
-    // Возвращаем неизменяемый список
-    public List<Film> getFilms() {
-        return Collections.unmodifiableList(films);  // Возвращаем неизменяемый список
+    public void setFilms(List<Film> films) {
+        this.films = films != null ? films : new ArrayList<>();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Actor actor = (Actor) o;
-        return id == actor.id;
+        Director director = (Director) o;
+        return id == director.id;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class Actor extends Entity {
 
     @Override
     public String toString() {
-        return "Actor{" +
+        return "Director{" +
                 "name='" + name + '\'' +
                 ", films=" + films +
                 ", id=" + id +
