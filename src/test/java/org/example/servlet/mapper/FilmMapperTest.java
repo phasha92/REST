@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmMapperTest {
 
-
     private final FilmMapper filmMapper = new FilmMapper();
 
     @Test
@@ -49,7 +48,7 @@ public class FilmMapperTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             filmMapper.toDTO(new Actor(1, "John Doe", Collections.emptyList()));
         });
-        assertEquals("Expected a Film entity", exception.getMessage());
+        assertEquals("Expected an Film entity", exception.getMessage());
     }
 
     @Test

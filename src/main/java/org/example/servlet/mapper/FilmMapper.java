@@ -24,7 +24,9 @@ public class FilmMapper implements Mapper {
     @Override
     public Film toEntity(DTO dto) {
         if (dto instanceof FilmDTO filmDTO) {
-            return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of(), new Director()); // актеры добавляются позже
+            Director director = new Director();
+            director.setName(filmDTO.directorName());
+            return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of(), director); // актеры добавляются позже
         } else throw new IllegalArgumentException("Expected a FilmDTO");
     }
 }
