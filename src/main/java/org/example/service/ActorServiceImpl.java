@@ -13,8 +13,34 @@ import java.util.List;
 
 public class ActorServiceImpl implements ActorService {
 
-    private final ActorDAO dao = new ActorDAO();
-    private final Mapper mapper = new ActorMapper();
+    private final ActorDAO dao;
+    private final Mapper mapper;
+    private final LinkActorWithFilm actorWithFilm;
+
+    public ActorServiceImpl(ActorDAO dao, Mapper mapper, LinkActorWithFilm actorWithFilm) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.actorWithFilm = actorWithFilm;
+    }
+
+    public ActorServiceImpl() {
+        this.dao = new ActorDAO();
+        this.mapper = new ActorMapper();
+        this.actorWithFilm = new LinkActorWithFilm();
+    }
+
+    public ActorDAO getDao() {
+        return dao;
+    }
+
+    public Mapper getMapper() {
+        return mapper;
+    }
+
+    public LinkActorWithFilm getActorWithFilm(){
+        return actorWithFilm;
+    }
+
 
     @Override
     public void create(ActorDTO actorDTO) throws SQLException {
@@ -45,6 +71,6 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public void addFilmToActor(int actorId, int filmId) throws SQLException {
-        new LinkActorWithFilm().linkFilmWithActor(filmId, actorId);  // Добавляем связь актёра и фильма
+        actorWithFilm.linkFilmWithActor(filmId, actorId);  // Добавляем связь актёра и фильма
     }
 }
