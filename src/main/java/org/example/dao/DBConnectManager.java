@@ -42,7 +42,7 @@ public class DBConnectManager {
             config.setUsername(user);
             config.setPassword(password);
             config.setConnectionTimeout(50000);
-            config.setMaximumPoolSize(30);
+            config.setMaximumPoolSize(10);
             dataSource = new HikariDataSource(config);
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to initialize connection pool", e);

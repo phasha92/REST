@@ -1,5 +1,7 @@
 package org.example.dao;
+
 import org.junit.jupiter.api.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -14,9 +16,10 @@ public class DBConnectManagerTest {
     }
 
     @AfterEach
-    public void tearDown(){
+    public void tearDown() {
         dbConnectManager.closeDataSource();
     }
+
     @Test
     public void testGetConnection() throws SQLException {
         Connection connection = dbConnectManager.getConnection();
@@ -53,6 +56,7 @@ public class DBConnectManagerTest {
             new DBConnectManager("invalid-url", "user", "password");
         });
     }
+
     @Test
     public void testConstructorMissingUrl() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
