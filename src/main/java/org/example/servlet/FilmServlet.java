@@ -1,6 +1,5 @@
 package org.example.servlet;
 
-
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,24 +18,18 @@ import java.util.List;
 @WebServlet("/films/*")
 public class FilmServlet extends HttpServlet {
 
-    private static final String DRIVER_NAME = "org.postgresql.Driver";
-
     private transient FilmService filmService;
 
     public FilmServlet(FilmService filmService) {
         this.filmService = filmService;
     }
 
-    public FilmServlet() {}
+    public FilmServlet() {
+    }
 
     @Override
     public void init() throws ServletException {
         super.init();
-        try {
-            Class.forName(DRIVER_NAME);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         filmService = new FilmServiceImpl();
     }
 

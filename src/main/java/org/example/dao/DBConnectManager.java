@@ -10,6 +10,16 @@ import java.util.Properties;
 
 public class DBConnectManager {
 
+    private static final String DRIVER_NAME = "org.postgresql.Driver";
+
+    {
+        try {
+            Class.forName(DRIVER_NAME);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Sorry, driver not found", e);
+        }
+    }
+
     private HikariDataSource dataSource;
 
     public DBConnectManager() {
@@ -63,11 +73,12 @@ public class DBConnectManager {
             dataSource.close();
         }
     }
-    public boolean isClosed(){
+
+    public boolean isClosed() {
         return dataSource.isClosed();
     }
 
-    public HikariDataSource getDataSource(){
+    public HikariDataSource getDataSource() {
         return dataSource;
     }
 }
