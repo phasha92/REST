@@ -16,7 +16,7 @@ public class DBConnectManager {
         Properties properties = new Properties();
         try (InputStream input = DBConnectManager.class.getClassLoader().getResourceAsStream("db.properties")) {
             if (input == null) {
-                throw new RuntimeException("Sorry, unable to find db.properties");
+                throw new IllegalArgumentException("Sorry, unable to find db.properties");
             }
             properties.load(input);
             initializeDataSource(
@@ -25,7 +25,7 @@ public class DBConnectManager {
                     properties.getProperty("db.password")
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load database properties", e);
+            throw new IllegalArgumentException("Failed to load database properties", e);
         }
     }
 

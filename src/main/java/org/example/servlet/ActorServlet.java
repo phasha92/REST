@@ -18,17 +18,25 @@ import java.util.List;
 @WebServlet("/actors/*")
 public class ActorServlet extends HttpServlet {
 
+    private static final String DRIVER_NAME = "org.postgresql.Driver";
+
     private transient ActorService actorService;
+
+    public ActorServlet(ActorService actorService) {
+        this.actorService = actorService;
+    }
+
+    public ActorServlet() {}
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(DRIVER_NAME);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        actorService = new ActorServiceImpl();
+        this.actorService = new ActorServiceImpl();
     }
 
     @Override
