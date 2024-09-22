@@ -31,7 +31,7 @@ public class EntityExistenceChecker {
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery();) {
+            try (ResultSet resultSet = statement.executeQuery()) {
 
                 if (resultSet.next()) {
                     return resultSet.getInt(1) > 0;  // Если есть хотя бы одна запись

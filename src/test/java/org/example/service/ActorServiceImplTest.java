@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.dao.repository.ActorDAO;
-import org.example.dao.repository.LinkActorWithFilm;
+import org.example.dao.repository.util.link.LinkActorWithFilm;
 import org.example.model.Actor;
 import org.example.servlet.dto.ActorDTO;
 import org.example.servlet.mapper.ActorMapper;

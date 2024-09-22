@@ -1,23 +1,5 @@
 package org.example.service;
 
-import org.example.dao.repository.FilmDAO;
-import org.example.dao.repository.LinkActorWithFilm;
-import org.example.model.Film;
-import org.example.servlet.dto.FilmDTO;
-import org.example.servlet.mapper.FilmMapper;
-import org.example.servlet.mapper.Mapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class FilmServiceImplTest {
 /*
     private FilmDAO mockFilmDAO;

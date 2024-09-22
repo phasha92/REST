@@ -1,13 +1,16 @@
-package org.example.dao.repository;
+package org.example.dao.repository.util.link;
 
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.query.LinkedQuery;
+
+import java.sql.SQLException;
+
 import org.example.dao.repository.util.EntityExistenceChecker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+
 
 public class LinkActorWithFilm {
 
@@ -38,7 +41,6 @@ public class LinkActorWithFilm {
                     throw new SQLException("Film id(" + filmId + ") and actor id(" + actorId + ") are already linked");
                 }
 
-                // Если связи нет, то добавляем её
                 iStatement.setInt(1, filmId);
                 iStatement.setInt(2, actorId);
                 iStatement.executeUpdate();
@@ -49,7 +51,7 @@ public class LinkActorWithFilm {
     public void linkFilmWithActor(int filmId, int actorId) throws SQLException {
 
         EntityExistenceChecker checker = new EntityExistenceChecker();
-        // Проверка существования фильма и актёра
+
         if (!checker.isExist("Film", filmId)) {
             throw new SQLException("Film with id " + filmId + " does not exist.");
         }
@@ -58,7 +60,6 @@ public class LinkActorWithFilm {
             throw new SQLException("Actor with id " + actorId + " does not exist.");
         }
 
-        // Связываем фильм с актёром через таблицу Film_Actor
         linkEntities(filmId, actorId);
     }
 }

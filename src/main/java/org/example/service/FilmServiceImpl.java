@@ -1,7 +1,8 @@
 package org.example.service;
 
 import org.example.dao.repository.FilmDAO;
-import org.example.dao.repository.LinkActorWithFilm;
+import org.example.dao.repository.util.link.LinkActorWithFilm;
+import org.example.dao.repository.util.link.LinkDirectorWithFilm;
 import org.example.model.Film;
 import org.example.servlet.dto.FilmDTO;
 import org.example.servlet.mapper.FilmMapper;
@@ -15,17 +16,21 @@ public class FilmServiceImpl implements FilmService {
     private final FilmDAO dao;
     private final Mapper mapper;
     private final LinkActorWithFilm actorWithFilm;
+    private final LinkDirectorWithFilm directorWithFilm;
 
-    public FilmServiceImpl(FilmDAO dao, Mapper mapper, LinkActorWithFilm actorWithFilm) {
+
+    public FilmServiceImpl(FilmDAO dao, Mapper mapper, LinkActorWithFilm actorWithFilm, LinkDirectorWithFilm directorWithFilm) {
         this.dao = dao;
         this.mapper = mapper;
         this.actorWithFilm = actorWithFilm;
+        this.directorWithFilm = directorWithFilm;
     }
 
     public FilmServiceImpl() {
         this.dao = new FilmDAO();
         this.mapper = new FilmMapper();
         this.actorWithFilm = new LinkActorWithFilm();
+        this.directorWithFilm = new LinkDirectorWithFilm();
     }
 
     public FilmDAO getDao() {
@@ -69,6 +74,11 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void addActorToFilm(int filmId, int actorId) throws SQLException {
-        actorWithFilm.linkFilmWithActor(filmId, actorId);  // Добавляем связь
+        actorWithFilm.linkFilmWithActor(filmId, actorId);
+    }
+
+    @Override
+    public void addDirectorToFilm(int filmId, int directorId) throws SQLException {
+        directorWithFilm.linkFilmWithDirector(filmId, directorId);
     }
 }

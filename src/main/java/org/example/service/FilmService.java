@@ -13,4 +13,6 @@ public interface FilmService extends EntityService<Film> {
     void delete(int id) throws SQLException;
 
     void addActorToFilm(int filmId, int actorId) throws SQLException;
+
+    void addDirectorToFilm(int filmId, int directorId) throws SQLException;
 }
