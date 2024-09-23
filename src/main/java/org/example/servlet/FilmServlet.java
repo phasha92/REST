@@ -34,7 +34,7 @@ public class FilmServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
@@ -57,7 +57,7 @@ public class FilmServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         try {
             if (pathInfo != null && pathInfo.matches("/\\d+/actors/\\d+")) {
@@ -85,30 +85,30 @@ public class FilmServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_CREATED);
             }
         } catch (SQLException e) {
-            throw new ServletException(e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             FilmDTO filmDTO = new Gson().fromJson(request.getReader(), FilmDTO.class);
             filmService.update(filmDTO);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (SQLException e) {
-            throw new ServletException(e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();
         try {
             int filmId = Integer.parseInt(pathInfo.substring(1)); // Получаем ID из URL
             filmService.delete(filmId);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (SQLException e) {
-            throw new ServletException(e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
