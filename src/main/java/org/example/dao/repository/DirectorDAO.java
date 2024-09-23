@@ -30,10 +30,9 @@ public class DirectorDAO implements DAO<Director> {
             statement.setString(1, director.getName());
             statement.executeUpdate();
 
-            // Получаем сгенерированный ID режиссера
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    director.setId(generatedKeys.getInt(1)); // Устанавливаем ID в объект Director
+                    director.setId(generatedKeys.getInt(1));
                 }
             }
         }
@@ -103,8 +102,6 @@ public class DirectorDAO implements DAO<Director> {
                 int filmId = resultSet.getInt("id");
                 String filmTitle = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
-
-                //Director director = this.getById(directorId);
 
                 films.add(new Film(filmId, filmTitle, releaseYear, new ArrayList<>(), null));
             }

@@ -2,6 +2,7 @@ package org.example.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.example.exception.DatabaseDriverNotFoundException;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -12,11 +13,11 @@ public class DBConnectManager {
 
     private static final String DRIVER_NAME = "org.postgresql.Driver";
 
-    {
+    static {
         try {
             Class.forName(DRIVER_NAME);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Sorry, driver not found", e);
+            throw new DatabaseDriverNotFoundException("Sorry, driver not found", e);
         }
     }
 

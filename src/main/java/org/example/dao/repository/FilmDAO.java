@@ -59,8 +59,8 @@ public class FilmDAO implements DAO<Film> {
                 String title = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
                 int directorId = resultSet.getInt("director_id");
-                Director director = getDirectorById(directorId);  // Получаем режиссера
-                List<Actor> actors = getActorsByFilmId(id);  // Получаем актеров для фильма
+                Director director = getDirectorById(directorId);
+                List<Actor> actors = getActorsByFilmId(id);
 
                 film = new Film(id, title, releaseYear, actors, director);
             }
@@ -82,9 +82,9 @@ public class FilmDAO implements DAO<Film> {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
-                int directorId = resultSet.getInt("director_id");  // Получаем id режиссера
+                int directorId = resultSet.getInt("director_id");
 
-                List<Actor> actors = getActorsByFilmId(id);  // Получаем актеров для фильма
+                List<Actor> actors = getActorsByFilmId(id);
 
                 Director director = getDirectorById(directorId);
 
@@ -158,30 +158,6 @@ public class FilmDAO implements DAO<Film> {
             }
         }
         return null;
-    }
-
-    public List<Film> getFilmsByDirectorId(int directorId) throws SQLException {
-        List<Film> films = new ArrayList<>();
-        String sql = "SELECT * FROM film WHERE director_id = ?";
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, directorId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Director director = new Director();
-                    director.setId(resultSet.getInt("director_id"));
-                    director.setName("");
-                    films.add(new Film(
-                            resultSet.getInt("id"),
-                            resultSet.getString("title"),
-                            resultSet.getInt("release_year"),
-                            List.of(),
-                            director // Пустое имя, так как мы его получаем через JOIN
-                    ));
-                }
-            }
-        }
-        return films;
     }
 
 }

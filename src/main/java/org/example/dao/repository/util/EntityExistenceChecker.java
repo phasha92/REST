@@ -19,7 +19,7 @@ public class EntityExistenceChecker {
         this.connectManager = connectManager;
     }
 
-    public EntityExistenceChecker(){
+    public EntityExistenceChecker() {
         this.connectManager = new DBConnectManager();
     }
 

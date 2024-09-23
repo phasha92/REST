@@ -37,7 +37,7 @@ public class ActorServiceImpl implements ActorService {
         return mapper;
     }
 
-    public LinkActorWithFilm getActorWithFilm(){
+    public LinkActorWithFilm getActorWithFilm() {
         return actorWithFilm;
     }
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Film extends Entity {
     private String title;
     private int releaseYear;
-    private List<Actor> actors = new ArrayList<>();  // Список актеров
+    private List<Actor> actors = new ArrayList<>();
     private Director director;
 
     public Film(int id, String title, int releaseYear, List<Actor> actors, Director director) {
@@ -16,7 +16,7 @@ public class Film extends Entity {
         this.title = title;
         this.releaseYear = releaseYear;
         this.actors = actors != null ? new ArrayList<>(actors) : new ArrayList<>();
-        this.director = director != null? director : new Director();
+        this.director = director != null ? director : new Director();
     }
 
     public Film() {
@@ -48,7 +48,7 @@ public class Film extends Entity {
     }
 
     public Director getDirector() {
-        return director != null? director : new Director();
+        return director != null ? director : new Director();
     }
 
     public void setDirector(Director director) {

@@ -43,7 +43,7 @@ public class DirectorServlet extends HttpServlet {
                 List<Director> directors = directorService.getAll();
                 response.setContentType("application/json");
                 response.getWriter().write(new Gson().toJson(directors));
-            }else {
+            } else {
                 int directorId = Integer.parseInt(pathInfo.substring(1));
                 Director director = directorService.getById(directorId);
                 if (director != null) {
