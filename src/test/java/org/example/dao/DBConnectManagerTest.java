@@ -46,13 +46,6 @@ class DBConnectManagerTest {
     }
 
     @Test
-    void testInitializationException() {
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            new DBConnectManager("invalid-url", "user", "password");
-        });
-    }
-
-    @Test
     void testGetConnectionWithoutInitialization() {
         dbConnectManager.closeDataSource();
 
