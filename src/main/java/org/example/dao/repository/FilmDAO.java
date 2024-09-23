@@ -66,7 +66,6 @@ public class FilmDAO implements DAO<Film> {
             }
         }
         return film;
-
     }
 
     @Override
@@ -99,13 +98,11 @@ public class FilmDAO implements DAO<Film> {
     public void update(Film film) throws SQLException {
 
         String query = FilmQuery.UPDATE.getQuery();
-
         try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-
             statement.setString(1, film.getTitle());
             statement.setInt(2, film.getReleaseYear());
-            statement.setInt(3, film.getDirector().getId());  // Обновляем режиссера
+            statement.setInt(3, film.getDirector().getId());
             statement.setInt(4, film.getId());
             statement.executeUpdate();
         }
@@ -161,6 +158,30 @@ public class FilmDAO implements DAO<Film> {
             }
         }
         return null;
+    }
+
+    public List<Film> getFilmsByDirectorId(int directorId) throws SQLException {
+        List<Film> films = new ArrayList<>();
+        String sql = "SELECT * FROM film WHERE director_id = ?";
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, directorId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Director director = new Director();
+                    director.setId(resultSet.getInt("director_id"));
+                    director.setName("");
+                    films.add(new Film(
+                            resultSet.getInt("id"),
+                            resultSet.getString("title"),
+                            resultSet.getInt("release_year"),
+                            List.of(),
+                            director // Пустое имя, так как мы его получаем через JOIN
+                    ));
+                }
+            }
+        }
+        return films;
     }
 
 }

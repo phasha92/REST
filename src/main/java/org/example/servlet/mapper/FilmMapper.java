@@ -26,6 +26,7 @@ public class FilmMapper implements Mapper {
         if (dto instanceof FilmDTO filmDTO) {
             Director director = new Director();
             director.setName("");
+            director.setId(1);
             director.setName(filmDTO.directorName());
             return new Film(filmDTO.id(), filmDTO.title(), filmDTO.releaseYear(), List.of(), director); // актеры добавляются позже
         } else throw new IllegalArgumentException("Expected a FilmDTO");

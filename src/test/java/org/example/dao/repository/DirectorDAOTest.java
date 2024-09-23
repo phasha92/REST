@@ -31,7 +31,6 @@ public class DirectorDAOTest {
                 postgresContainer.getUsername(),
                 postgresContainer.getPassword());
 
-        // Создаем таблицу Director
         try (Connection connection = dbConnectManager.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS Actor (id SERIAL PRIMARY KEY, name VARCHAR(255));");

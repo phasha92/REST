@@ -16,7 +16,7 @@ public class Film extends Entity {
         this.title = title;
         this.releaseYear = releaseYear;
         this.actors = actors != null ? new ArrayList<>(actors) : new ArrayList<>();
-        this.director = director;
+        this.director = director != null? director : new Director();
     }
 
     public Film() {
@@ -48,7 +48,7 @@ public class Film extends Entity {
     }
 
     public Director getDirector() {
-        return director;
+        return director != null? director : new Director();
     }
 
     public void setDirector(Director director) {

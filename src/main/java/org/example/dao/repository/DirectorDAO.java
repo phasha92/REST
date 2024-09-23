@@ -41,8 +41,10 @@ public class DirectorDAO implements DAO<Director> {
 
     @Override
     public Director getById(int id) throws SQLException {
+
         String query = DirectorQuery.GET_BY_ID.getQuery();
         Director director = null;
+
         try (Connection connection = connectManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -54,7 +56,11 @@ public class DirectorDAO implements DAO<Director> {
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         new ArrayList<>());
+
+                List<Film> films = getFilmsByDirectorId(director.getId());
+                director.setFilms(films);
             }
+
         }
         return director;
     }
@@ -98,9 +104,9 @@ public class DirectorDAO implements DAO<Director> {
                 String filmTitle = resultSet.getString("title");
                 int releaseYear = resultSet.getInt("release_year");
 
-                Director director = this.getById(directorId);
+                //Director director = this.getById(directorId);
 
-                films.add(new Film(filmId, filmTitle, releaseYear, new ArrayList<>(), director));
+                films.add(new Film(filmId, filmTitle, releaseYear, new ArrayList<>(), null));
             }
         }
         return films;
@@ -108,17 +114,29 @@ public class DirectorDAO implements DAO<Director> {
 
 
     public List<Director> getAll() throws SQLException {
-        List<Director> directors = new ArrayList<>();
+
         String query = DirectorQuery.GET_ALL.getQuery();
+        List<Director> directors = new ArrayList<>();
 
         try (Connection connection = connectManager.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                directors.add(new Director(resultSet.getInt("id"), resultSet.getString("name"), new ArrayList<>()));
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                List<Film> films = getFilmsByDirectorId(id);
+
+                directors.add(new Director(id, name, films));
             }
         }
         return directors;
     }
 }
+
+
+
+
+
+
+

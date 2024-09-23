@@ -5,7 +5,6 @@ import org.example.model.Director;
 import org.example.model.Film;
 import org.example.servlet.dto.ActorDTO;
 import org.example.servlet.dto.FilmDTO;
-import org.example.servlet.mapper.FilmMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

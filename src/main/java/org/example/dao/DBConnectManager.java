@@ -61,9 +61,6 @@ public class DBConnectManager {
 
     // Получение соединения
     public Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            throw new IllegalStateException("DataSource has not been initialized.");
-        }
         return dataSource.getConnection();
     }
 
