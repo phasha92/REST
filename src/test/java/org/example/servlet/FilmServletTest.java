@@ -129,16 +129,6 @@ class FilmServletTest {
     }
 
     @Test
-    void testDoDelete_FilmById() throws Exception {
-        when(request.getPathInfo()).thenReturn("/1");
-
-        filmServlet.doDelete(request, response);
-
-        verify(filmService).delete(1);
-        verify(response).setStatus(HttpServletResponse.SC_NO_CONTENT);
-    }
-
-    @Test
     void testSQLExceptionHandling() throws Exception {
         when(request.getPathInfo()).thenReturn("/1");
         doThrow(new SQLException("Database error")).when(filmService).getById(1);
@@ -146,5 +136,15 @@ class FilmServletTest {
         filmServlet.doGet(request, response);
 
         verify(response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
+    }
+
+    @Test
+    void testDoDelete_FilmById() throws Exception {
+        when(request.getPathInfo()).thenReturn("/1");
+
+        filmServlet.doDelete(request, response);
+
+        verify(filmService).delete(1);
+        verify(response).setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 }

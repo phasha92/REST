@@ -1,17 +1,29 @@
 package org.example.dao;
 
 import org.junit.jupiter.api.*;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Testcontainers
 class DBConnectManagerTest {
+
+    @Container
+    public static PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("test")
+            .withUsername("test")
+            .withPassword("test");
 
     private DBConnectManager dbConnectManager;
 
     @BeforeEach
     public void setUp() {
-        dbConnectManager = new DBConnectManager();
+        dbConnectManager = new DBConnectManager(postgresContainer.getJdbcUrl(),
+                postgresContainer.getUsername(),
+                postgresContainer.getPassword());
     }
 
     @AfterEach
