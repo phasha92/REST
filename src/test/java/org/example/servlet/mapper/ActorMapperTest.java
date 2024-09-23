@@ -14,35 +14,33 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ActorMapperTest {
+class ActorMapperTest {
 
     private final ActorMapper actorMapper = new ActorMapper();
 
     @Test
-    public void testToDTO_ValidActor() {
+    void testToDTO_ValidActor() {
         Actor actor =
                 new Actor(1, "John Doe", List.of(
                         new Film(1, "Film A", 2020, Collections.emptyList(),
                                 new Director(1, "Mr. Smith", new ArrayList<>()
-                        ))));
+                                ))));
         ActorDTO dto = actorMapper.toDTO(actor);
-
         assertEquals(1, dto.id());
         assertEquals("John Doe", dto.name());
         assertEquals(List.of("Film A"), dto.filmTitles());
     }
 
     @Test
-    public void testToEntity_ValidDTO() {
+    void testToEntity_ValidDTO() {
         ActorDTO dto = new ActorDTO(1, "John Doe", List.of("Film A"));
         Actor actor = actorMapper.toEntity(dto);
-
         assertEquals(1, actor.getId());
         assertEquals("John Doe", actor.getName());
     }
 
     @Test
-    public void testToDTO_InvalidEntity() {
+    void testToDTO_InvalidEntity() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             actorMapper.toDTO(
                     new Film(1, "Film A", 2020, Collections.emptyList(),
@@ -53,7 +51,7 @@ public class ActorMapperTest {
     }
 
     @Test
-    public void testToEntity_InvalidDTO() {
+    void testToEntity_InvalidDTO() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             actorMapper.toEntity(new FilmDTO(1, "Film A", 2020, List.of("John Doe"), "Mr. Smith"));
         });

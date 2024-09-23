@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EntityTest {
+class EntityTest {
     private Actor actor;
     private Film film;
     private Director director;
@@ -23,13 +23,11 @@ public class EntityTest {
 
     @Test
     void testGettersAndSetters() {
-        // Actor tests
         assertEquals(1, actor.getId());
         assertEquals("John Doe", actor.getName());
         actor.setName("Jane Doe");
         assertEquals("Jane Doe", actor.getName());
 
-        // Film tests
         assertEquals(1, film.getId());
         assertEquals("Sample Film", film.getTitle());
         film.setTitle("Another Film");
@@ -37,7 +35,6 @@ public class EntityTest {
         film.setReleaseYear(2021);
         assertEquals(2021, film.getReleaseYear());
 
-        // Director tests
         assertEquals(1, director.getId());
         assertEquals("Mr. Smith", director.getName());
         director.setName("Andrew");
@@ -132,7 +129,6 @@ public class EntityTest {
         assertNotEquals(film1, film3, "Objects with different ids should not be equal");
         assertNotEquals(film1.hashCode(), film3.hashCode(), "Hash codes of objects with different ids should not match");
 
-        // Director tests
         Director director1 = new Director(1, "Mr. Smith", null);
         Director director2 = new Director(1, "Mr. Johnson", null);
         Director director3 = new Director(2, "Mr. Smith", null);

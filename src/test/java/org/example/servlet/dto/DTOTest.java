@@ -1,7 +1,5 @@
 package org.example.servlet.dto;
 
-import org.example.servlet.dto.ActorDTO;
-import org.example.servlet.dto.FilmDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -9,10 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DTOTest {
+class DTOTest {
 
     @Test
-    public void testActorDTOValid() {
+    void testActorDTOValid() {
         ActorDTO actor = new ActorDTO(1, "John Doe", List.of("Film A", "Film B"));
         assertEquals(1, actor.id());
         assertEquals("John Doe", actor.name());
@@ -20,7 +18,7 @@ public class DTOTest {
     }
 
     @Test
-    public void testActorDTONullValues() {
+    void testActorDTONullValues() {
         ActorDTO actor = new ActorDTO(1, null, null);
         assertEquals(1, actor.id());
         assertNull(actor.name());
@@ -28,7 +26,7 @@ public class DTOTest {
     }
 
     @Test
-    public void testActorDTOEmptyList() {
+    void testActorDTOEmptyList() {
         ActorDTO actor = new ActorDTO(1, "Jane Doe", Collections.emptyList());
         assertEquals(1, actor.id());
         assertEquals("Jane Doe", actor.name());
@@ -36,7 +34,7 @@ public class DTOTest {
     }
 
     @Test
-    public void testFilmDTOValid() {
+    void testFilmDTOValid() {
         FilmDTO film = new FilmDTO(1, "Some Movie", 2020, List.of("Actor A", "Actor B"), "Mr. Smith");
         assertEquals(1, film.id());
         assertEquals("Some Movie", film.title());
@@ -46,7 +44,7 @@ public class DTOTest {
     }
 
     @Test
-    public void testFilmDTONullValues() {
+    void testFilmDTONullValues() {
         FilmDTO film = new FilmDTO(1, null, 0, null, null);
         assertEquals(1, film.id());
         assertNull(film.title());
@@ -56,7 +54,7 @@ public class DTOTest {
     }
 
     @Test
-    public void testFilmDTOEmptyList() {
+    void testFilmDTOEmptyList() {
         FilmDTO film = new FilmDTO(1, "Some Movie", 2020, Collections.emptyList(), "Mr. Smith");
         assertEquals(1, film.id());
         assertEquals("Some Movie", film.title());
@@ -66,11 +64,10 @@ public class DTOTest {
     }
 
     @Test
-    public void testActorDTOEqualsAndHashCode() {
+    void testActorDTOEqualsAndHashCode() {
         ActorDTO actor1 = new ActorDTO(1, "John Doe", List.of("Film A"));
         ActorDTO actor2 = new ActorDTO(1, "Jane Doe", List.of("Film B"));
         ActorDTO actor3 = new ActorDTO(2, "John Doe", List.of("Film A"));
-
         assertEquals(actor1, actor1);
         assertNotEquals(actor1, null);
         assertNotEquals(actor1, actor2);
@@ -80,11 +77,10 @@ public class DTOTest {
     }
 
     @Test
-    public void testFilmDTOEqualsAndHashCode() {
+    void testFilmDTOEqualsAndHashCode() {
         FilmDTO film1 = new FilmDTO(1, "Inception", 2010, List.of("Actor A"), "Director A");
         FilmDTO film2 = new FilmDTO(1, "Interstellar", 2014, List.of("Actor B"), "Director B");
         FilmDTO film3 = new FilmDTO(2, "Inception", 2010, List.of("Actor A"), "Director A");
-
         assertEquals(film1, film1);
         assertNotEquals(film1, null);
         assertNotEquals(film1, film2);
@@ -94,25 +90,24 @@ public class DTOTest {
     }
 
     @Test
-    public void testDirectorDTOValid() {
-        DirectorDTO director = new DirectorDTO(1, "Mr. Smith",List.of("Film A"));
+    void testDirectorDTOValid() {
+        DirectorDTO director = new DirectorDTO(1, "Mr. Smith", List.of("Film A"));
         assertEquals(1, director.id());
         assertEquals("Mr. Smith", director.name());
     }
 
     @Test
-    public void testDirectorDTONullValues() {
-        DirectorDTO director = new DirectorDTO(1, null,null);
+    void testDirectorDTONullValues() {
+        DirectorDTO director = new DirectorDTO(1, null, null);
         assertEquals(1, director.id());
         assertNull(director.name());
     }
 
     @Test
-    public void testDirectorDTOEqualsAndHashCode() {
+    void testDirectorDTOEqualsAndHashCode() {
         DirectorDTO director1 = new DirectorDTO(1, "Mr. Smith", null);
         DirectorDTO director2 = new DirectorDTO(1, "Mr. Johnson", null);
         DirectorDTO director3 = new DirectorDTO(2, "Mr. Smith", null);
-
         assertEquals(director1, director1);
         assertNotEquals(director1, null);
         assertNotEquals(director1, director2);
@@ -122,14 +117,14 @@ public class DTOTest {
     }
 
     @Test
-    public void testInvalidActorDTO() {
+    void testInvalidActorDTO() {
         assertThrows(NullPointerException.class, () -> {
             new ActorDTO(1, "John Doe", null).filmTitles().get(0);
         });
     }
 
     @Test
-    public void testInvalidFilmDTO() {
+    void testInvalidFilmDTO() {
         assertThrows(NullPointerException.class, () -> {
             new FilmDTO(1, null, 2020, null, null).actorNames().get(0);
         });

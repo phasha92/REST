@@ -28,6 +28,18 @@ public class DirectorServiceImpl implements DirectorService {
         this.directorWithFilm = new LinkDirectorWithFilm();
     }
 
+    public DirectorDAO getDirectorDAO() {
+        return directorDAO;
+    }
+
+    public Mapper getMapper() {
+        return mapper;
+    }
+
+    public LinkDirectorWithFilm getDirectorWithFilm() {
+        return directorWithFilm;
+    }
+
     @Override
     public void create(DirectorDTO directorDTO) throws SQLException {
         Director director = (Director) mapper.toEntity(directorDTO);

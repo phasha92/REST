@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
-public class DirectorDAOTest {
+class DirectorDAOTest {
 
     @Container
     public static PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:latest")
@@ -42,85 +42,74 @@ public class DirectorDAOTest {
     }
 
     @Test
-    public void testCreateDirector() throws SQLException {
+    void testCreateDirector() throws SQLException {
         Director director = new Director();
         director.setName("Test Director");
         directorDAO.create(director);
-
-        assertNotNull(director.getId()); // Проверяем, что ID присвоен
         Director retrievedDirector = directorDAO.getById(director.getId());
         assertEquals("Test Director", retrievedDirector.getName());
     }
 
     @Test
-    public void testGetById() throws SQLException {
+    void testGetById() throws SQLException {
         Director director = new Director();
         director.setName("Test Director");
         directorDAO.create(director);
-
         Director retrievedDirector = directorDAO.getById(director.getId());
         assertNotNull(retrievedDirector);
         assertEquals(director.getName(), retrievedDirector.getName());
     }
 
     @Test
-    public void testUpdateDirector() throws SQLException {
+    void testUpdateDirector() throws SQLException {
         Director director = new Director();
         director.setName("Test Director");
         directorDAO.create(director);
-
         director.setName("Updated Director");
         directorDAO.update(director);
-
         Director updatedDirector = directorDAO.getById(director.getId());
         assertEquals("Updated Director", updatedDirector.getName());
     }
 
     @Test
-    public void testDeleteDirector() throws SQLException {
+    void testDeleteDirector() throws SQLException {
         Director director = new Director();
         director.setName("Test Director");
         directorDAO.create(director);
-
         directorDAO.delete(director.getId());
         Director deletedDirector = directorDAO.getById(director.getId());
-        assertNull(deletedDirector); // Проверяем, что режиссер удален
+        assertNull(deletedDirector);
     }
 
     @Test
-    public void testGetAllDirectors() throws SQLException {
+    void testGetAllDirectors() throws SQLException {
         Director director1 = new Director();
         director1.setName("Director 1");
         Director director2 = new Director();
         director2.setName("Director 2");
-
         directorDAO.create(director1);
         directorDAO.create(director2);
-
         List<Director> directors = directorDAO.getAll();
         assertEquals(2, directors.size());
     }
 
     @Test
-    public void testGetByIdNonExistentDirectorReturnsNull() throws SQLException {
-        Director retrievedDirector = directorDAO.getById(999); // Запрос к несуществующему ID
+    void testGetByIdNonExistentDirectorReturnsNull() throws SQLException {
+        Director retrievedDirector = directorDAO.getById(999);
         assertNull(retrievedDirector);
     }
 
     @Test
-    public void testGetFilmsByDirectorId_WithFilms() throws SQLException {
+    void testGetFilmsByDirectorId_WithFilms() throws SQLException {
         Director director = new Director();
         director.setName("Test Director");
         directorDAO.create(director);
-
-        // Создаем фильм и связываем его с режиссером
         try (Connection connection = dbConnectManager.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("INSERT INTO Film (title, release_year, director_id) VALUES ('Film 1', 2020, " + director.getId() + ");");
             statement.execute("INSERT INTO Film (title, release_year, director_id) VALUES ('Film 2', 2021, " + director.getId() + ");");
         }
 
-        // Проверяем получение фильмов
         List<Film> films = directorDAO.getFilmsByDirectorId(director.getId());
         assertEquals(2, films.size());
         assertEquals("Film 1", films.get(0).getTitle());
@@ -128,28 +117,24 @@ public class DirectorDAOTest {
     }
 
     @Test
-    public void testGetFilmsByDirectorId_NoFilms() throws SQLException {
+    void testGetFilmsByDirectorId_NoFilms() throws SQLException {
         Director director = new Director();
         director.setName("Test Director No Films");
         directorDAO.create(director);
-
-        // Проверяем получение фильмов
         List<Film> films = directorDAO.getFilmsByDirectorId(director.getId());
-        assertTrue(films.isEmpty()); // Должен вернуть пустой список
+        assertTrue(films.isEmpty());
     }
 
     @Test
-    public void testGetFilmsByDirectorId_NonExistentDirector() throws SQLException {
-        // Проверяем получение фильмов для несуществующего режиссера
-        List<Film> films = directorDAO.getFilmsByDirectorId(999); // Не существующий ID
-        assertTrue(films.isEmpty()); // Должен вернуть пустой список
+    void testGetFilmsByDirectorId_NonExistentDirector() throws SQLException {
+        List<Film> films = directorDAO.getFilmsByDirectorId(999);
+        assertTrue(films.isEmpty());
     }
 
     @AfterEach
     public void tearDown() throws SQLException {
         try (Connection connection = dbConnectManager.getConnection();
              Statement statement = connection.createStatement()) {
-            // Удаляем таблицу после тестов
             statement.execute("DROP TABLE IF EXISTS Director;");
             statement.execute("DROP TABLE IF EXISTS Film_Actor;");
             statement.execute("DROP TABLE IF EXISTS Film;");

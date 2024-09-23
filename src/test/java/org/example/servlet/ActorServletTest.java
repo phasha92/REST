@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class ActorServletTest {
+class ActorServletTest {
 
     private ActorServlet actorServlet;
     private ActorService actorService;
@@ -42,81 +42,65 @@ public class ActorServletTest {
     }
 
     @Test
-    public void testDoGet_AllActors() throws Exception {
+    void testDoGet_AllActors() throws Exception {
         Film film1 = new Film();
         film1.setTitle("Film 1");
         Film film2 = new Film();
         film2.setTitle("Film 2");
-
         List<Actor> actors = Arrays.asList(
                 new Actor(1, "Actor One", List.of(film1)),
                 new Actor(2, "Actor Two", List.of(film2))
         );
         when(actorService.getAll()).thenReturn(actors);
         when(request.getPathInfo()).thenReturn("/");
-
         actorServlet.doGet(request, response);
-
         verify(response).setContentType("application/json");
         writer.flush();
         String jsonResponse = writer.toString().trim();
-
         assertEquals(new Gson().toJson(actors), jsonResponse);
     }
 
     @Test
-    public void testDoGet_ActorById() throws Exception {
+    void testDoGet_ActorById() throws Exception {
         Film film1 = new Film();
         film1.setTitle("Film 1");
         Actor actor = new Actor(1, "Actor One", List.of(film1));
         when(actorService.getById(1)).thenReturn(actor);
         when(request.getPathInfo()).thenReturn("/1");
-
         actorServlet.doGet(request, response);
-
         verify(response).setContentType("application/json");
-
         writer.flush();
         String jsonResponse = writer.toString().trim();
-
         String expectedJson = new Gson().toJson(actor);
         assertEquals(expectedJson, jsonResponse);
     }
 
-
     @Test
-    public void testDoPost_CreateActor() throws Exception {
+    void testDoPost_CreateActor() throws Exception {
         ActorDTO actorDTO = new ActorDTO(0, "New Actor", List.of("New Film"));
         String json = new Gson().toJson(actorDTO);
         when(request.getReader()).thenReturn(new BufferedReader(new StringReader(json)));
         when(request.getPathInfo()).thenReturn(null);
-
         actorServlet.doPost(request, response);
-
         verify(actorService).create(actorDTO);
         verify(response).setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @Test
-    public void testDoPut_UpdateActor() throws Exception {
+    void testDoPut_UpdateActor() throws Exception {
         ActorDTO actorDTO = new ActorDTO(1, "Updated Actor", List.of("Updated Film"));
         String json = new Gson().toJson(actorDTO);
         when(request.getReader()).thenReturn(new BufferedReader(new StringReader(json)));
-
         actorServlet.doPut(request, response);
-
         verify(actorService).update(actorDTO);
         verify(response).setStatus(HttpServletResponse.SC_OK);
     }
 
     @Test
-    public void testDoDelete_ActorById() throws Exception {
+    void testDoDelete_ActorById() throws Exception {
         when(request.getPathInfo()).thenReturn("/1");
-
         actorServlet.doDelete(request, response);
-
         verify(actorService).delete(1);
         verify(response).setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
-
 }

@@ -45,6 +45,10 @@ public class FilmServiceImpl implements FilmService {
         return actorWithFilm;
     }
 
+    public LinkDirectorWithFilm getDirectorWithFilm() {
+        return directorWithFilm;
+    }
+
     @Override
     public void create(FilmDTO filmDTO) throws SQLException {
         Film film = (Film) mapper.toEntity(filmDTO);
