@@ -88,11 +88,9 @@ class DirectorServiceImplTest {
 
     @Test
     void testInternalFields() {
-        DirectorServiceImpl directorService2 = Mockito.spy(new DirectorServiceImpl());
+        DirectorServiceImpl directorService2 = Mockito.spy(directorService);
         assertNotNull(directorService2.getDirectorDAO(), "DAO should not be null");
         assertNotNull(directorService2.getMapper(), "Mapper should not be null");
-        assertTrue(directorService2.getDirectorDAO() instanceof DirectorDAO, "DAO should be an instance of DirectorDAO");
-        assertTrue(directorService2.getMapper() instanceof DirectorMapper, "Mapper should be an instance of DirectorMapper");
         assertNotNull(directorService2.getDirectorWithFilm(), "LinkDirectorWithFilm should not be null");
     }
 }

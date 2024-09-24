@@ -4,6 +4,7 @@ import org.example.dao.DBConnectManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.example.dao.repository.util.EntityExistenceChecker;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -22,6 +23,7 @@ class LinkActorWithFilmTest {
 
     private LinkActorWithFilm linkActorWithFilm;
     private DBConnectManager dbConnectManager;
+    private EntityExistenceChecker checker;
 
     @BeforeEach
     public void setUp() throws SQLException {
@@ -38,7 +40,8 @@ class LinkActorWithFilmTest {
             statement.execute("INSERT INTO Film (id) VALUES (1);");
             statement.execute("INSERT INTO Actor (id) VALUES (1);");
         }
-        linkActorWithFilm = new LinkActorWithFilm(dbConnectManager);
+        checker = new EntityExistenceChecker(dbConnectManager);
+        linkActorWithFilm = new LinkActorWithFilm(dbConnectManager, checker);
     }
 
     @Test

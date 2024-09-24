@@ -15,13 +15,16 @@ import java.sql.ResultSet;
 public class LinkActorWithFilm {
 
     private final DBConnectManager connectManager;
+    private final EntityExistenceChecker entityExistenceChecker;
 
-    public LinkActorWithFilm(DBConnectManager connectManager) {
+    public LinkActorWithFilm(DBConnectManager connectManager, EntityExistenceChecker entityExistenceChecker) {
         this.connectManager = connectManager;
+        this.entityExistenceChecker = entityExistenceChecker;
     }
 
     public LinkActorWithFilm() {
         this.connectManager = new DBConnectManager();
+        this.entityExistenceChecker = new EntityExistenceChecker();
     }
 
     public void linkEntities(int filmId, int actorId) throws SQLException {
@@ -50,7 +53,7 @@ public class LinkActorWithFilm {
 
     public void linkFilmWithActor(int filmId, int actorId) throws SQLException {
 
-        EntityExistenceChecker checker = new EntityExistenceChecker();
+        EntityExistenceChecker checker = entityExistenceChecker;
 
         if (!checker.isExist("Film", filmId)) {
             throw new SQLException("Film with id " + filmId + " does not exist.");

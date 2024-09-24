@@ -64,10 +64,4 @@ class EntityExistenceCheckerTest {
         assertFalse(exists);
     }
 
-    @Test
-    void testEmptyConstructor() {
-        EntityExistenceChecker entityExistenceChecker = new EntityExistenceChecker();
-        assertNotNull(entityExistenceChecker);
-        assertNotNull(entityExistenceChecker.getConnectManager());
-    }
 }

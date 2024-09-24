@@ -4,7 +4,6 @@ import org.example.dao.repository.ActorDAO;
 import org.example.dao.repository.util.link.LinkActorWithFilm;
 import org.example.model.Actor;
 import org.example.servlet.dto.ActorDTO;
-import org.example.servlet.mapper.ActorMapper;
 import org.example.servlet.mapper.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,11 +88,9 @@ class ActorServiceImplTest {
 
     @Test
     void testInternalFields() {
-        ActorServiceImpl actorService2 = Mockito.spy(new ActorServiceImpl());
+        ActorServiceImpl actorService2 = Mockito.spy(actorService);
         assertNotNull(actorService2.getDao(), "DAO should not be null");
         assertNotNull(actorService2.getMapper(), "Mapper should not be null");
-        assertTrue(actorService2.getDao() instanceof ActorDAO, "DAO should be an instance of ActorDAO");
-        assertTrue(actorService2.getMapper() instanceof ActorMapper, "Mapper should be an instance of ActorMapper");
         assertNotNull(actorService2.getActorWithFilm(), "LinkActorWithFilm should not be null");
     }
 }

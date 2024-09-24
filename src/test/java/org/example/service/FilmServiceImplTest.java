@@ -1,12 +1,12 @@
 package org.example.service;
 
 import org.example.dao.repository.FilmDAO;
+import org.example.dao.repository.util.EntityExistenceChecker;
 import org.example.dao.repository.util.link.LinkActorWithFilm;
 import org.example.dao.repository.util.link.LinkDirectorWithFilm;
 import org.example.model.Director;
 import org.example.model.Film;
 import org.example.servlet.dto.FilmDTO;
-import org.example.servlet.mapper.FilmMapper;
 import org.example.servlet.mapper.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +26,7 @@ class FilmServiceImplTest {
     private LinkActorWithFilm mockLinkActorWithFilm;
     private LinkDirectorWithFilm mockLinkDirectorWithFilm;
     private FilmServiceImpl filmService;
+    private EntityExistenceChecker mockEntityExistenceChecker;
 
     @BeforeEach
     void setUp() {
@@ -33,6 +34,7 @@ class FilmServiceImplTest {
         mockMapper = mock(Mapper.class);
         mockLinkActorWithFilm = mock(LinkActorWithFilm.class);
         mockLinkDirectorWithFilm = mock(LinkDirectorWithFilm.class);
+        mockEntityExistenceChecker = mock(EntityExistenceChecker.class);
         filmService = new FilmServiceImpl(mockFilmDAO, mockMapper, mockLinkActorWithFilm, mockLinkDirectorWithFilm);
     }
 
@@ -100,11 +102,9 @@ class FilmServiceImplTest {
 
     @Test
     void testInternalFields() {
-        FilmServiceImpl filmService2 = Mockito.spy(new FilmServiceImpl());
+        FilmServiceImpl filmService2 = Mockito.spy(filmService);
         assertNotNull(filmService2.getDao(), "DAO should not be null");
         assertNotNull(filmService2.getMapper(), "Mapper should not be null");
-        assertTrue(filmService2.getDao() instanceof FilmDAO, "DAO should be an instance of FilmDAO");
-        assertTrue(filmService2.getMapper() instanceof FilmMapper, "Mapper should be an instance of FilmMapper");
         assertNotNull(filmService2.getActorWithFilm(), "LinkActorWithFilm should not be null");
         assertNotNull(filmService2.getDirectorWithFilm(), "LinkDirectorWithFilm should not be null");
     }

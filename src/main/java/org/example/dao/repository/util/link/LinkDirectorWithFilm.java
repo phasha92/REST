@@ -2,6 +2,7 @@ package org.example.dao.repository.util.link;
 
 import org.example.dao.DBConnectManager;
 import org.example.dao.repository.query.LinkedQuery;
+import org.example.dao.repository.util.EntityExistenceChecker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,13 +12,16 @@ import java.sql.SQLException;
 public class LinkDirectorWithFilm {
 
     private final DBConnectManager connectManager;
+    private final EntityExistenceChecker entityExistenceChecker;
 
-    public LinkDirectorWithFilm(DBConnectManager connectManager) {
+    public LinkDirectorWithFilm(DBConnectManager connectManager, EntityExistenceChecker entityExistenceChecker) {
         this.connectManager = connectManager;
+        this.entityExistenceChecker = entityExistenceChecker;
     }
 
     public LinkDirectorWithFilm() {
         this.connectManager = new DBConnectManager();
+        this.entityExistenceChecker = new EntityExistenceChecker();
     }
 
     public void linkEntities(int filmId, int directorID) throws SQLException {
@@ -47,22 +51,11 @@ public class LinkDirectorWithFilm {
 
     public void linkFilmWithDirector(int filmId, int directorId) throws SQLException {
         // Добавьте проверки существования для фильма и режиссера
-        checkEntityExists("Film", filmId);
-        checkEntityExists("Director", directorId);
+
+        if (!entityExistenceChecker.isExist("Film", filmId)) throw new SQLException("Film with id " + filmId + " does not exist.");
+        if (!entityExistenceChecker.isExist("Director", directorId)) throw new SQLException("Director with id " + directorId + " does not exist.");
 
         linkEntities(filmId, directorId);
     }
 
-    private void checkEntityExists(String entity, int id) throws SQLException {
-        String query = "SELECT COUNT(*) FROM " + entity + " WHERE id = ?";
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next() && resultSet.getInt(1) == 0) {
-                    throw new SQLException(entity + " with id " + id + " does not exist.");
-                }
-            }
-        }
-    }
 }
